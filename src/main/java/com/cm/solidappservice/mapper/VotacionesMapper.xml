@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="VotacionesMapper">
+	    
+    <select id="validarEstadoVotaciones" resultType="int">
+        SELECT estado FROM asa_configuracion
+    </select>
+    
+    <select id="consultarEstadoVotante" 
+		parameterType="java.lang.String"
+		resultType="java.lang.String">
+       SELECT voto FROM asa_votantes WHERE cedula = #{value}
+    </select>
+    
+	<select id="consultarZonaElectoral" 
+		parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+       SELECT ZonaElectoral FROM asa_votantes WHERE cedula = #{value}
+    </select>
+
+	<select id="getCandidatos" 
+		resultType="com.cm.solidappservice.model.votaciones.bd.CandidatosMD" 
+		parameterType="java.lang.Integer">
+    	SELECT 
+			consecutivo, nombre, ZonaElectoral
+		FROM 
+			asa_candidatos WHERE ZonaElectoral = #{value}
+    </select>
+
+    <update id="cambiarEstadoVotante"
+		parameterType="java.lang.String">
+   		UPDATE 
+			asa_votantes 
+		SET 
+			voto = 'S', 
+			mediovoto = 'IVR', fechavoto = now() 
+		WHERE cedula = #{value}
+    </update>
+    
+	<update id="registrarVoto" 
+		parameterType="com.cm.solidappservice.model.votaciones.bd.CandidatosMD">
+    	UPDATE 
+			asa_candidatos 
+		SET 
+			votos = votos + 1
+		WHERE 
+			consecutivo = #{consecutivo} and 
+			ZonaElectoral = #{ZonaElectoral}
+    </update>
+
+	<select id="consultarCandidato" 
+		resultType="com.cm.solidappservice.model.votaciones.bd.CandidatosMD" 
+		parameterType="com.cm.solidappservice.model.votaciones.bd.CandidatosMD">
+    	SELECT 
+			*
+		FROM
+			asa_candidatos
+		WHERE 
+			consecutivo = #{consecutivo} and 
+			ZonaElectoral = #{ZonaElectoral}
+    </select>
+
+</mapper>

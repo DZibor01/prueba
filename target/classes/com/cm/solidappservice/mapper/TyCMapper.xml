@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TyCMapper">
+
+	<select id="obtenerTodosTyC" 
+		parameterType="java.lang.String"
+		resultType="com.cm.solidappservice.model.tyc.bd.TyCMD">
+		SELECT 
+			* 
+		FROM 
+			TAB_APPTERMYCOND
+	</select>
+
+	<select id="obtenerActivosTyC" parameterType="java.lang.String"
+		resultType="com.cm.solidappservice.model.tyc.bd.TyCMD">
+		SELECT 
+			* 
+		FROM 
+			TAB_APPTERMYCOND
+		WHERE
+			I_ESTADO = 'A'
+	</select>
+
+
+	<!-- Selecciona el usuario en caso que ya este ingresado en la tabla -->
+	<select id="obtenerTodosTyCAceptadosCedula" 
+		parameterType="java.lang.String"
+		resultType="com.cm.solidappservice.model.tyc.bd.TyCAceptadosMD">
+		SELECT 
+			K_ACEPTACION,
+			AANUMNIT,
+			K_TERMYCOND,
+			F_ACEPTACION,
+			I_ACEPTACION,
+			IP
+		FROM
+			TAB_APPACEPTTERMYCOND
+		WHERE AANUMNIT = #{value}
+	</select>
+
+	<select id="obtenerTyCAceptadosCedula" 
+		parameterType="com.cm.solidappservice.model.tyc.bd.TyCAceptadosMD"
+		resultType="com.cm.solidappservice.model.tyc.bd.TyCAceptadosMD">
+		SELECT 
+			K_ACEPTACION,
+			AANUMNIT,
+			K_TERMYCOND,
+			F_ACEPTACION,
+			I_ACEPTACION,
+			IP
+		FROM
+			TAB_APPACEPTTERMYCOND
+		WHERE 
+			AANUMNIT = #{aanumnit} AND
+			K_TERMYCOND = #{k_termycond} AND
+			I_ACEPTACION = 'S'
+	</select>
+
+	<!-- Inserta el usuario que acepta nuevos terminos y condiciones -->
+	<insert id="registrarTyCAceptados"
+		parameterType="com.cm.solidappservice.model.tyc.bd.TyCAceptadosMD">
+		INSERT INTO TAB_APPACEPTTERMYCOND
+		(
+			K_ACEPTACION,
+			AANUMNIT,
+			K_TERMYCOND,
+			F_ACEPTACION,
+			I_ACEPTACION,
+			IP
+		)VALUES(
+			#{k_aceptacion},
+			#{aanumnit},
+			#{k_termycond},
+			to_date(#{f_aceptacion} ,'dd/mm/yyyy hh24:mi:ss'),
+			#{i_aceptacion},
+			#{ip}
+		)
+	</insert>
+
+</mapper>

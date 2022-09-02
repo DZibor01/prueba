@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="EstadoCuentaMapper">
+
+	<select id="procesarSaldosCuentas"
+		parameterType="com.cm.solidappservice.model.estadocuenta.bd.EstadoCuentaMD"
+		statementType="CALLABLE">
+		{
+			call PK_APP_CONSULTASALDOS.PR_APP_ESTCTA_2(
+				#{v_aanumnit, jdbcType = VARCHAR, javaType=java.lang.String}
+			)
+		}
+	</select>
+
+	<select id="obtenerCuentas" 
+	parameterType="com.cm.solidappservice.model.estadocuenta.bd.EstadoCuentaMD" 
+	resultType="com.cm.solidappservice.model.estadocuenta.bd.EstadoCuentaMD">
+		SELECT *
+		FROM 
+			TAB_APPESTCTA 
+		WHERE AANUMNIT = #{aanumnit} 
+		ORDER BY N_TIPODR
+	</select>
+	
+	
+	<select id="procesarMovimientosCuenta"
+		parameterType="com.cm.solidappservice.model.estadocuenta.bd.EstadoCuentaMD" 
+		statementType="CALLABLE">
+		{
+			call PK_APP_CONSULTASALDOS.PR_APP_ESTCTA_DET_2(
+				#{v_aanumnit, jdbcType = VARCHAR, javaType=java.lang.String},
+				#{k_tipcuent, jdbcType =INTEGER, javaType=java.lang.Integer},
+				#{v_tipodr, jdbcType = VARCHAR, javaType=java.lang.String},
+				#{v_numdoc, jdbcType = VARCHAR, javaType=java.lang.String}
+		)}
+	</select>
+
+	<select id="obtenerMovimientos" 
+		parameterType="com.cm.solidappservice.model.estadocuenta.bd.EstadoCuentaMD" 
+		resultType="com.cm.solidappservice.model.estadocuenta.bd.MovimientoMD">
+		SELECT 
+			M.A_TIPODR, 
+			M.A_NUMDOC, 
+			M.F_MOVIMI, 
+			M.K_NUMDOC, 
+			M.N_TIPDOC,
+			M.AANUMNIT,
+			M.V_VALOR
+		FROM 
+			TAB_APPMVTO M WHERE M.A_TIPODR = #{a_tipodr} AND M.A_NUMDOC = #{a_numdoc} 
+		ORDER BY M.F_MOVIMI DESC
+	</select>
+	
+	<select id="obtenerMovimientosCedula" 
+	parameterType="com.cm.solidappservice.model.estadocuenta.bd.EstadoCuentaMD" 
+	resultType="com.cm.solidappservice.model.estadocuenta.bd.MovimientoMD">
+		SELECT 
+			M.A_TIPODR, 
+			M.A_NUMDOC, 
+			M.F_MOVIMI, 
+			M.K_NUMDOC, 
+			M.N_TIPDOC,
+			M.AANUMNIT,
+			M.V_VALOR
+		FROM 
+			TAB_APPMVTO M WHERE M.AANUMNIT = #{aanumnit} 
+		ORDER BY M.F_MOVIMI DESC
+	</select>	
+
+
+	
+
+</mapper>

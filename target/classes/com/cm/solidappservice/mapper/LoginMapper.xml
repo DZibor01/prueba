@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="LoginMapper">
+
+	<resultMap id="resultLogin" 
+		type="com.cm.solidappservice.model.login.bd.LoginMD">
+		<result property="v_numnit" column="V_NUMNIT" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="v_clave" column="V_CLAVE" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="v_result" column="V_RESULT" jdbcType="VARCHAR" javaType="java.lang.String" />
+	</resultMap>
+
+	<select id="loginFunction" 
+		parameterType="com.cm.solidappservice.model.login.bd.LoginMD"
+		resultMap="resultLogin" statementType="CALLABLE">
+		{call PK_APP_TRANSA.PR_VALIDA_USUARIO(
+			#{v_numnit, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+			#{v_clave, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+			#{v_origaplic, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+			#{v_result, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT}
+		)}
+	</select>
+
+	<select id="consultarFechaUltimoIngreso" 
+		parameterType="java.lang.String"
+		resultType="java.lang.String">
+		SELECT
+			TO_CHAR(F_ULTINGRESO, 'dd/mm/yyyy hh24:mi:ss') AS F_ULTINGRESO
+		FROM 
+			PTEAPP.TAB_APPREGISTRO
+		WHERE 
+			A_NUMNIT = #{value} AND N_ORIGAPLIC = 'APPPRESENTE'
+	</select>
+	
+
+	<resultMap id="resultRecordarClave" 
+		type="com.cm.solidappservice.model.login.bd.RecordarClaveMD">
+		<result property="v_numnit" column="V_NUMNIT" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="v_clave" column="V_CLAVE" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="v_result" column="V_RESULT" jdbcType="VARCHAR" javaType="java.lang.String" />
+	</resultMap>
+
+	<select id="recordarClave" 
+		parameterType="com.cm.solidappservice.model.login.bd.RecordarClaveMD"
+		resultMap="resultRecordarClave" statementType="CALLABLE">
+		{call pk_app_gr_claves.PR_RECUPERA_CLAVE(
+			#{v_aanumnit, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+			#{v_vclave, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT},
+			#{v_email, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT}
+		)}
+	</select>
+
+	<select id="consultarUsuarioApp" 
+		parameterType="com.cm.solidappservice.model.login.bd.AppRegistroMD"
+		resultType="com.cm.solidappservice.model.login.bd.AppRegistroMD">
+		SELECT * FROM LINIX.MEDA_APPREGISTRO WHERE A_NUMNIT = #{a_numnit}
+	</select>
+
+
+</mapper>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="TransferenciaMapper">
+
+	<select id="cargarListadoCuentasInscritas"
+		parameterType="java.lang.String"
+		resultType="com.cm.solidappservice.model.transferencias.bd.CuentaInscritaMD">
+		SELECT
+			AANUMNIT,
+			NNASOCIA,
+			K_CUENTA,
+			N_NUMCTA,
+			F_FECAPE,
+			I_ESTADO,
+			K_IDTERC_TIT,
+			K_IDTERC,
+			NNASOCIA_O,
+			AANUMNIT_O
+		FROM 
+			VIEW_APPINSCRITA
+		WHERE AANUMNIT_O = #{value}
+	</select>
+	
+	<select id="cargarListadoCuentasDisponibles" 
+		parameterType="java.lang.String" 
+		resultType="com.cm.solidappservice.model.transferencias.bd.CuentaDisponibleMD">
+		SELECT
+			A_NUMCTA,
+			AANUMNIT,
+			NNASOCIA
+		FROM 
+			VIEW_APPCTASDEST
+		WHERE AANUMNIT = #{value}
+	</select>
+	
+	<resultMap id="resultInscribirCuenta" 
+		type="com.cm.solidappservice.model.transferencias.bd.InscripcionCuentaMD">
+		<result property="v_aanumnit" column="V_AANUMNIT" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="v_aanumnit_d" column="V_AANUMNIT_D" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="v_numcta" column="V_NUMCTA" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="v_respue" column="V_RESPUE" jdbcType="VARCHAR" javaType="java.lang.String" />
+	</resultMap>
+	
+	<select id="inscribirCuenta" 
+		parameterType="com.cm.solidappservice.model.transferencias.bd.InscripcionCuentaMD"
+		resultMap="resultInscribirCuenta" statementType="CALLABLE">
+		{call PK_APP_TRANSA.PR_INSCRIBIR_CTA(
+			#{v_aanumnit, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+			#{v_aanumnit_d, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+			#{v_numcta, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+			#{v_respue, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT}
+		)}
+	</select>
+	
+	 	
+ 	<insert id="solicitarInscribirCuenta" 
+	 	parameterType="com.cm.solidappservice.model.transferencias.bd.SolicitudInscripcionCuentaMD">
+		INSERT INTO TAB_APPINSCRICTAS
+		(
+			ID_DISPOSITIVO,
+			AANUMNIT_O,
+			I_TIPCTA,
+			K_CODBAN,
+			N_CUENTA,     
+			A_NUMNIT_TIT,
+			N_TERCER,     
+			N_OBSERV    
+		)
+		VALUES
+		(
+			#{id_dispositivo},
+			#{aanumnit_o},
+			#{i_tipcta},
+			#{k_codban},
+			#{n_cuenta},
+			#{a_numnit_tit},
+			#{n_tercer}, 
+			#{n_observ}
+		)
+ 	</insert>
+ 	
+	<select id="cargarListadoBancos"
+		resultType="com.cm.solidappservice.model.transferencias.bd.BancoMD">
+		SELECT
+			K_CODBAN,
+			N_BANCO
+		FROM 
+			VIEW_APPBANCOS
+	</select>
+ 	
+ 	<resultMap id="resultEliminarCuenta" 
+	 	type="com.cm.solidappservice.model.transferencias.bd.EliminacionCuentaMD">
+		<result property="v_aanumnit" column="V_AANUMNIT" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="v_numcta" column="V_NUMCTA" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="v_respue" column="V_RESPUE" jdbcType="VARCHAR" javaType="java.lang.String" />
+	</resultMap>
+	
+	<select id="eliminarCuenta" 
+		parameterType="com.cm.solidappservice.model.transferencias.bd.EliminacionCuentaMD"
+		resultMap="resultEliminarCuenta" statementType="CALLABLE">
+		{call PK_APP_TRANSA.PR_BORRA_INSCRITA(
+			#{v_aanumnit, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+			#{v_numcta, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+			#{v_respue, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT}
+		)}
+	</select>
+	
+
+	<insert id="crearTransferencia" 
+		parameterType="com.cm.solidappservice.model.transferencias.bd.TransferenciaMD">
+		INSERT INTO TAB_APPSOLITRASL
+		(
+		   ID_DISPOSITIVO ,
+		   AANUMNIT_O ,      
+		   A_NUMDOC ,        
+		   V_VALOR ,         
+		   K_IDTERC ,        
+		   K_IDTERC_TIT ,    
+		   N_NUMCTA ,        
+		   F_SOLICI
+	   )VALUES(
+		   #{id_dispositivo},
+		   #{aanumnit_o},      
+		   #{a_numdoc},        
+		   #{v_valor},         
+		   #{k_idterc},        
+		   #{k_idterc_tit},    
+		   #{n_numcta},        
+		   #{f_solici}
+	   )
+	</insert>
+	
+	<!-- Selecciona las transferencias que no se completaron -->
+   <select id="selectTransferencias" 
+   		parameterType="com.cm.solidappservice.model.transferencias.bd.TransferenciaMD"
+   		resultType="com.cm.solidappservice.model.transferencias.bd.TransferenciaMD">
+		SELECT 
+			*
+		FROM
+			TAB_APPSOLITRASL
+		WHERE 
+			AANUMNIT_O = #{aanumnit_o} AND
+			F_SOLICI >= SYSDATE-(1/24) AND        
+			K_ANO_MOV IS NULL AND
+			K_SUCURS_MOV IS NULL AND
+			K_NUMDOC_MOV IS NULL AND
+			K_TIPDOC_MOV IS NULL
+   </select>
+
+
+</mapper>

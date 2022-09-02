@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<setting name="jdbcTypeForNull" value="NULL" />
+	</settings>
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="oracle.jdbc.driver.OracleDriver" />
+				<property name="url" value="jdbc:oracle:thin:@10.2.98.52:1521:LNXPRU" />
+				<property name="username" value="PTEAPP" />
+				<property name="password" value="dtG*xuEG-o6IUm+" />
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+		<mapper resource="com/cm/solidappservice/mapper/AdelantoNominaMapper.xml" />
+		<mapper resource="com/cm/solidappservice/mapper/AgenciasMapper.xml" />
+		<mapper resource="com/cm/solidappservice/mapper/AhorrosMapper.xml" />
+		<mapper resource="com/cm/solidappservice/mapper/CajaMenorPteMapper.xml" />
+		<mapper resource="com/cm/solidappservice/mapper/CentrosVacacionalesMapper.xml" />
+		<mapper resource="com/cm/solidappservice/mapper/CodigoVerificacionMapper.xml" />
+		<mapper resource="com/cm/solidappservice/mapper/CreditosMapper.xml" />
+		<mapper resource="com/cm/solidappservice/mapper/DatosAsociadoMapper.xml" />
+		<mapper resource="com/cm/solidappservice/mapper/DispositivoMapper.xml" />
+		<mapper resource="com/cm/solidappservice/mapper/DiverseInfoMapper.xml" />
+		<mapper resource="com/cm/solidappservice/mapper/EstadoCuentaMapper.xml" />
+		<mapper resource="com/cm/solidappservice/mapper/LoginMapper.xml" />
+		<mapper resource="com/cm/solidappservice/mapper/LogsApiMapper.xml" />
+		<mapper resource="com/cm/solidappservice/mapper/LogsMapper.xml" />
+		<mapper resource="com/cm/solidappservice/mapper/MensajesInboxMapper.xml" />
+		<mapper resource="com/cm/solidappservice/mapper/ObligacionesMapper.xml" />
+		<mapper resource="com/cm/solidappservice/mapper/ParametrosGeneralesMapper.xml" />
+		<mapper resource="com/cm/solidappservice/mapper/PortalUnicoMapper.xml" />
+		<mapper resource="com/cm/solidappservice/mapper/SegurosMapper.xml" />
+		<mapper resource="com/cm/solidappservice/mapper/TarjetaPresenteMapper.xml" />
+		<mapper resource="com/cm/solidappservice/mapper/TokenMapper.xml" />
+		<mapper resource="com/cm/solidappservice/mapper/TransferenciaMapper.xml" />
+		<mapper resource="com/cm/solidappservice/mapper/TyCMapper.xml" />
+	</mappers>
+</configuration>

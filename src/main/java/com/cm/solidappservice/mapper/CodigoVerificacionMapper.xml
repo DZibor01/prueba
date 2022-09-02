@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CodigoVerificacionMapper">
+
+	<select id="obtenerCodigoVerificacion" 
+		parameterType="com.cm.solidappservice.model.codigoverificacion.bd.CodigoVerificacionMD"
+		resultType="com.cm.solidappservice.model.codigoverificacion.bd.CodigoVerificacionMD">
+		SELECT 
+			*
+		FROM 
+			TAB_APPCODIGOVERIF
+		WHERE
+			K_CODIGO = #{k_codigo} AND
+			A_ANUMNIT = #{a_anumnit} 			
+	</select>
+	
+	<select id="obtenerCodigosVerificacionCedula" 
+		parameterType="com.cm.solidappservice.model.codigoverificacion.bd.CodigoVerificacionMD"
+		resultType="com.cm.solidappservice.model.codigoverificacion.bd.CodigoVerificacionMD">
+		SELECT 
+			K_CODIGO,
+			N_CODIGO,
+			A_ANUMNIT,
+			F_GENERACION,
+			F_EXPIRACION,
+			I_EXPIRADO
+		FROM 
+			TAB_APPCODIGOVERIF
+		WHERE
+			A_ANUMNIT = #{value} AND
+			I_EXPIRADO = 'N'
+	</select>
+
+	<insert id="crearCodigoVerificacion"
+		parameterType="com.cm.solidappservice.model.codigoverificacion.bd.CodigoVerificacionMD">
+		INSERT INTO TAB_APPCODIGOVERIF
+		(
+			K_CODIGO,
+			N_CODIGO,
+			A_ANUMNIT,
+			F_GENERACION,
+			F_EXPIRACION,
+			I_EXPIRADO,
+			N_TIPOENVIO,
+			N_ENVIO
+		) VALUES (
+			#{k_codigo},
+			#{n_codigo},
+			#{a_anumnit},
+			#{f_generacion},
+			#{f_expiracion},
+			#{i_expirado},
+			#{n_tipoenvio},
+			#{n_envio}
+		)
+	</insert>
+
+	<update id="actualizarCodigoVerificacion" 
+		parameterType="com.cm.solidappservice.model.codigoverificacion.bd.CodigoVerificacionMD">
+		UPDATE TAB_APPCODIGOVERIF SET
+			I_EXPIRADO = #{i_expirado}
+		WHERE 
+			K_CODIGO = #{k_codigo} AND
+			A_ANUMNIT = #{a_anumnit}
+	</update>
+
+	<update id="actualizarCodigoVerificacionResultado" 
+		parameterType="com.cm.solidappservice.model.codigoverificacion.bd.CodigoVerificacionMD">
+		UPDATE TAB_APPCODIGOVERIF SET
+			N_RESULTADO = #{n_resultado}
+		WHERE 
+			K_CODIGO = #{k_codigo} AND
+			A_ANUMNIT = #{a_anumnit}
+	</update>
+	
+
+</mapper>

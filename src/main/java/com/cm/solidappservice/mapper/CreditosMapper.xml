@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CreditosMapper">
+
+	<select id="obtenerModalidadesCreditos"
+		resultType="com.cm.solidappservice.model.creditos.bd.LineasCreditoMD">
+		SELECT * FROM PTEAPP.TAB_APPLINEASCRED ORDER BY K_LINEA
+	</select>
+
+	<resultMap id="resultDatosAsociadoFunction"
+		type="com.cm.solidappservice.model.datosasociado.bd.DatosAsociadoMD">
+		<result property="v_aanumnit" column="V_AANUMNIT" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="cedula" column="CEDULA" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="n_apell1" column="N_APELL1" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="n_apell2" column="N_APELL2" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="n_nombr1" column="N_NOMBR1" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="n_nombr2" column="N_NOMBR2" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="d_email" column="D_EMAIL" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="telefonofijo" column="TELEFONOFIJO" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="celular" column="CELULAR" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="direccion" column="DIRECCION" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="n_barrio" column="N_BARRIO" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="n_ciudad" column="N_CIUDAD" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="k_ciudad" column="K_CIUDAD" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="k_depart" column="K_DEPART" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="estadocivil" column="ESTADOCIVIL" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="v_sueldo" column="V_SUELDO" jdbcType="NUMERIC" javaType="java.lang.Integer" />
+		<result property="f_antigu" column="F_ANTIGU" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="codigodependencia" column="CODIGODEPENDENCIA" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="n_dependencia" column="N_DEPENDENCIA" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="codigoregional" column="CODIGOREGIONAL" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="n_regional" column="N_REGIONAL" jdbcType="VARCHAR" javaType="java.lang.String" />
+	</resultMap>
+
+	<select id="obtenerDatosAsociadoFunction"
+		parameterType="com.cm.solidappservice.model.datosasociado.bd.DatosAsociadoMD"
+		resultMap="resultDatosAsociadoFunction" statementType="CALLABLE">
+		{
+			call PK_APP_SOLITUDCREDITO.PR_DATOSPERSONALESASOCIADO(
+			#{V_AANUMNIT, jdbcType = VARCHAR, javaType=java.lang.String, mode =IN},
+			#{CEDULA, jdbcType = VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{N_APELL1, jdbcType =VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{N_APELL2, jdbcType = VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{N_NOMBR1, jdbcType = VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{N_NOMBR2, jdbcType = VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{D_EMAIL, jdbcType = VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{TELEFONOFIJO, jdbcType = VARCHAR, javaType=java.lang.String, mode=OUT},
+			#{CELULAR, jdbcType = VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{DIRECCION, jdbcType = VARCHAR, javaType=java.lang.String, mode=OUT},
+			#{N_BARRIO, jdbcType = VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{N_CIUDAD, jdbcType = VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{K_CIUDAD, jdbcType = VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{K_DEPART, jdbcType = VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{ESTADOCIVIL, jdbcType = VARCHAR,javaType=java.lang.String, mode=OUT},
+			#{V_SUELDO, jdbcType = INTEGER, javaType=java.lang.Integer, mode =OUT},
+			#{F_ANTIGU, jdbcType = VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{CODIGODEPENDENCIA, jdbcType = VARCHAR,javaType=java.lang.String, mode= OUT},
+			#{N_DEPENDENCIA,jdbcType = VARCHAR, javaType=java.lang.String, mode=OUT},
+			#{CODIGOREGIONAL,jdbcType = VARCHAR, javaType=java.lang.String, mode=OUT},
+			#{N_REGIONAL, jdbcType = VARCHAR, javaType=java.lang.String, mode=OUT}
+		)}
+	</select>
+
+	<insert id="radicarCreditos"
+		parameterType="com.cm.solidappservice.model.creditos.bd.SolicitudCreditoMD">
+		INSERT INTO PTEAPP.TAB_APPSOLCREDITO
+		(
+			K_SOLICITUD,
+			IDENTIFICACION,
+			N_APELL1,
+			N_APELL2,
+			N_NOMBR1,
+			N_NOMBR2,
+			T_TELFIJO,
+			T_TERCEL,
+			N_BARRIO,
+			D_DIREC,
+			D_EMAIL,
+			N_CIUDAD,
+			K_CIUDAD,
+			K_DEPART,
+			I_TIPVIVIENDA,
+			I_ESTCIV,
+			V_SALARIO,
+			K_CODDEPENDENCIA,
+			K_REGIONAL,
+			F_ANTIG,
+			V_SOLICITADO,
+			K_LINEA,
+			I_FORMAENTREGA,
+			N_OBSERVACION,
+			I_ACEPTACON,
+			F_SOLICITUD,
+			N_CANAL,
+			F_LOGEO,
+			IP,
+			N_REFHOTEL
+		)VALUES(
+			#{k_solicitud},
+			#{identificacion},
+			#{n_apell1},
+			#{n_apell2},
+			#{n_nombr1},
+			#{n_nombr2},
+			#{t_telfijo},
+			#{t_tercel},
+			#{n_barrio},
+			#{d_direc},
+			#{d_email},
+			#{n_ciudad},
+			#{k_ciudad},
+			#{k_depart},
+			#{i_tipvivienda},
+			#{i_estciv},
+			#{v_salario},
+			#{k_coddependencia},
+			#{k_regional},
+			#{f_antig},
+			#{v_solicitado},
+			#{k_linea},
+			#{i_formaentrega},
+			#{n_observacion},
+			#{i_aceptacon},
+			to_date(#{f_solicitud} ,'dd/mm/yyyy hh24:mi:ss'),
+			#{n_canal},
+			to_date(#{f_logeo} ,'dd/mm/yyyy hh24:mi:ss'),
+			#{ip},
+			#{n_refhotel}
+		)
+
+	</insert>
+
+	<insert id="guardarInformacionCredito"
+		parameterType="com.cm.solidappservice.model.creditos.bd.InformacionCreditoMD">
+		INSERT INTO PTEAPP.TAB_APPINFOFSOLICRED
+		(
+			K_SOLICITUD,
+			I_OTROSINGRESOS,
+			V_OTROSINGRESOS,
+			V_EGRESOS,
+			I_TIENEVEHICULO,
+			O_PLACA,
+			V_VEHICULO,
+			N_PRENDAAFOVORDE,
+			I_TIENEPROPIEDAD,
+			N_DIREPROPIEDAD,
+			N_CIUDADPROPI,
+			N_DEPARTPROPI,
+			V_COMERCIALPROPI,
+			N_HIPOTECA,
+			V_ACTIVOS,
+			V_PASIVOS,
+			V_PATRIMONIO
+		)VALUES(
+			#{k_solicitud},
+			#{i_otrosingresos},
+			#{v_otrosingresos},
+			#{v_egresos},
+			#{i_tienevehiculo},
+			#{o_placa},
+			#{v_vehiculo},
+			#{n_prendaafovorde},
+			#{i_tienepropiedad},
+			#{n_direpropiedad},
+			#{n_ciudadpropi},
+			#{n_departpropi},
+			#{v_comercialpropi},
+			#{n_hipoteca},
+			#{v_activos},
+			#{v_pasivos},
+			#{v_patrimonio}
+		)
+	</insert>
+
+	<insert id="guardarReferencia"
+		parameterType="com.cm.solidappservice.model.creditos.bd.ReferenciasCreditoMD">
+		INSERT INTO PTEAPP.TAB_APPREFSOLICRED
+		(
+			K_SOLICITUD,
+			K_REFERENCIA,
+			N_NOMBREAPE,
+			T_TERCEL,
+			T_TELFIJO,
+			D_EMAIL,
+			D_DIREC,
+			N_CIUDAD,
+			K_CIUDAD,
+			K_DEPART,
+			PARENTESCO
+		)VALUES(
+			#{k_solicitud},
+			#{k_referencia},
+			#{n_nombreape},
+			#{t_tercel},
+			#{t_telfijo},
+			#{d_email},
+			#{d_direc},
+			#{n_ciudad},
+			#{k_ciudad},
+			#{k_depart},
+			#{parentesco}
+		)
+	</insert>
+
+	<select id="cargarCiudadesDepartamentos"
+		parameterType="com.cm.solidappservice.model.creditos.bd.UbicacionesMD" 
+		resultType="com.cm.solidappservice.model.creditos.bd.UbicacionesMD">
+		SELECT
+			K_CIUDAD,
+			N_CIUDAD,
+			K_DEPART,
+			N_DEPART,
+			K_PAIS,
+			N_PAIS
+		FROM 
+			VIEW_APPUBICACION
+	</select>
+
+	<select id="cargarCreditosRadicados"
+		parameterType="com.cm.solidappservice.model.creditos.bd.SolicitudCreditoMD"
+		resultType="com.cm.solidappservice.model.creditos.bd.SolicitudCreditoMD">
+		SELECT
+			K_SOLICITUD,
+			K_LINEA,
+			V_SOLICITADO,
+			F_SOLICITUD,
+			I_FORMAENTREGA
+		FROM 
+			TAB_APPSOLCREDITO
+		WHERE IDENTIFICACION = #{aanumnit}
+		ORDER BY
+			F_SOLICITUD DESC
+	</select>
+
+	<select id="obtenerGestorAsociadoFunction"
+		parameterType="com.cm.solidappservice.model.creditos.bd.GestorAsociadoMD"
+		resultMap="resultGestorAsociadoFunction" statementType="CALLABLE">
+		{ call
+			PK_APP_GESTORDELASOCIADO.PR_DATOSPERSONALESGESTOR(
+			#{IDENTIFICACION, jdbcType = VARCHAR, javaType=java.lang.String, mode =IN},
+			#{CEDGESTOR, jdbcType = INTEGER, javaType=java.lang.String, mode =OUT},
+			#{NOMBGESTOR, jdbcType =VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{IDTERCERO, jdbcType = VARCHAR, javaType=java.lang.String, mode =OUT}
+		)}
+	</select>
+
+	<resultMap id="resultGestorAsociadoFunction" 
+		type="com.cm.solidappservice.model.creditos.bd.GestorAsociadoMD">
+		<result property="identificacion" column="IDENTIFICACION" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="cedgestor" column="CEDGESTOR" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="nomgestor" column="NOMBGESTOR" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="idtercero" column="IDTERCERO" jdbcType="VARCHAR" javaType="java.lang.String" />
+	</resultMap>
+
+
+	<!-- Nuevo datos asociado -->
+	<resultMap id="resultDatosAsociado"
+		type="com.cm.solidappservice.model.datosasociado.bd.DatosPersonalesMD">
+		<result property="v_aanumnit" column="V_AANUMNIT" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="n_apell1" column="N_APELL1" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="n_apell2" column="N_APELL2" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="n_nombr1" column="N_NOMBR1" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="n_nombr2" column="N_NOMBR2" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="d_email" column="D_EMAIL" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="t_fijo" column="T_FIJO" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="t_celular" column="T_CELULAR" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="n_direccion" column="N_DIRECCION" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="n_barrio" column="N_BARRIO" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="n_ciudad" column="N_CIUDAD" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="k_ciudad" column="K_CIUDAD" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="k_depart" column="K_DEPART" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="n_estciv" column="N_ESTCIV" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="v_sueldo" column="V_SUELDO" jdbcType="NUMERIC" javaType="java.lang.Integer" />
+		<result property="f_antigu" column="F_ANTIGU" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="k_dependencia" column="K_DEPENDENCIA" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="n_dependencia" column="N_DEPENDENCIA" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="k_regional" column="K_REGIONAL" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="n_regional" column="N_REGIONAL" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="n_cargo" column="N_CARGO" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="i_tipnom" column="I_TIPNOM" jdbcType="VARCHAR" javaType="java.lang.String" />
+	</resultMap>
+
+	<select id="obtenerDatosAsociado"
+		parameterType="com.cm.solidappservice.model.datosasociado.bd.DatosPersonalesMD"
+		resultMap="resultDatosAsociado" statementType="CALLABLE">
+		{
+			call PK_APP_SOLITUDCREDITO.PR_DATOSASOCIADO(
+			#{v_aanumnit, jdbcType = VARCHAR, javaType=java.lang.String, mode =IN},
+			#{n_apell1, jdbcType =VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{n_apell2, jdbcType = VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{n_nombr1, jdbcType = VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{n_nombr2, jdbcType = VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{d_email, jdbcType = VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{t_fijo, jdbcType = VARCHAR, javaType=java.lang.String, mode=OUT},
+			#{t_celular, jdbcType = VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{n_direccion, jdbcType = VARCHAR, javaType=java.lang.String, mode=OUT},
+			#{n_barrio, jdbcType = VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{n_ciudad, jdbcType = VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{k_ciudad, jdbcType = VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{k_depart, jdbcType = VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{n_estciv, jdbcType = VARCHAR,javaType=java.lang.String, mode=OUT},
+			#{v_sueldo, jdbcType = INTEGER, javaType=java.lang.Integer, mode =OUT},
+			#{f_antigu, jdbcType = VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{k_dependencia, jdbcType = VARCHAR,javaType=java.lang.String, mode= OUT},
+			#{n_dependencia,jdbcType = VARCHAR, javaType=java.lang.String, mode=OUT},
+			#{k_regional,jdbcType = VARCHAR, javaType=java.lang.String, mode=OUT},
+			#{n_regional, jdbcType = VARCHAR, javaType=java.lang.String, mode=OUT},
+			#{n_cargo, jdbcType = VARCHAR, javaType=java.lang.String, mode=OUT},
+			#{i_tipnom, jdbcType = VARCHAR, javaType=java.lang.String, mode=OUT}
+		)}
+	</select>
+
+
+	<select id="obtenerParentescos"
+		resultType="com.cm.solidappservice.model.creditos.bd.ParentescosMD">
+		SELECT RV_ABBREVIATION, RV_MEANING FROM CG_REF_CODES
+            WHERE RV_DOMAIN = 'DM_PARENT' AND RV_HIGH_VALUE = 'CD' ORDER BY RV_ABBREVIATION
+	</select>
+
+
+	<select id="obtenerPaises"
+		parameterType="com.cm.solidappservice.model.creditos.bd.UbicacionesMD" 
+		resultType="com.cm.solidappservice.model.creditos.bd.UbicacionesMD">
+		SELECT DISTINCT
+			K_PAIS,
+			N_PAIS
+		FROM 
+			VIEW_APPUBICACION	
+		ORDER BY 
+			N_PAIS
+	</select>
+
+	<select id="obtenerDepartamentos"
+		parameterType="com.cm.solidappservice.model.creditos.bd.UbicacionesMD" 
+		resultType="com.cm.solidappservice.model.creditos.bd.UbicacionesMD">
+		SELECT DISTINCT
+			K_DEPART,
+			N_DEPART
+		FROM 
+			VIEW_APPUBICACION
+		WHERE 
+			K_PAIS = #{value}
+		ORDER BY
+			N_DEPART
+	</select>
+
+	<select id="obtenerCiudades"
+		parameterType="com.cm.solidappservice.model.creditos.bd.UbicacionesMD" 
+		resultType="com.cm.solidappservice.model.creditos.bd.UbicacionesMD">
+		SELECT DISTINCT
+			K_CIUDAD,
+			N_CIUDAD
+		FROM 
+			VIEW_APPUBICACION
+		WHERE 
+			K_PAIS = #{k_pais} AND
+			K_DEPART = #{k_depart}
+		ORDER BY
+			N_CIUDAD
+	</select>
+
+</mapper>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TarjetaPresenteMapper">
+	<select id="cargarListado" 
+		parameterType="com.cm.solidappservice.model.tarjetapresente.bd.TarjetaMD" 
+		resultType="com.cm.solidappservice.model.tarjetapresente.bd.TarjetaMD">
+		SELECT
+			AANUMNIT,
+			I_ESTADO,
+			K_NUMPLA,
+			K_MNUMPL,
+			N_PERCOL,
+			A_NUMCTA,
+			A_TIPODR,
+			A_OBLIGA,
+			F_MOVIM,
+			V_CUPO
+		FROM VIEW_APP_TJ
+		WHERE AANUMNIT = #{aanumnit}
+	</select>
+	
+	<insert id="crearCambioTarjeta" 
+		parameterType="com.cm.solidappservice.model.tarjetapresente.bd.ActualizacionTarjetaMD">
+ 		INSERT INTO TAB_APPTJESTADO
+ 		(
+			K_NUMPLA,
+			AANUMNIT,      
+			N_MOTIVO,      
+			F_SOLICI,      
+			I_ESTADO,      
+			ID_DISPOSITIVO 
+		)VALUES(
+			#{k_numpla},
+			#{aanumnit},        
+			#{n_motivo},        
+			#{f_solici},        
+			#{i_estado},        
+			#{id_dispositivo}
+		)
+ 	</insert>
+
+	<select id="cargarListadoMotivosBloqueo"
+		resultType="com.cm.solidappservice.model.tarjetapresente.bd.MotivoBloqueoTarjetaMD">
+		SELECT
+			K_CODBLO,
+			N_CODBLO
+		FROM TAB_APPTJCODBLOQ
+		ORDER BY K_CODBLO
+	</select>
+
+	<insert id="reponerTarjeta"
+		parameterType="com.cm.solidappservice.model.tarjetapresente.bd.ReposicionTarjetaMD">
+		INSERT INTO TAB_APPREPOTARJETA
+		(
+			K_REPOSICION,
+			IDENTIFICACION,
+			N_NOMBR1,
+			N_NOMBR2,
+			N_APELL1,
+			N_APELL2,
+			N_NUMPLASTICO,
+			N_CIUDAD,
+			K_CODDEPENDENCIA,
+			N_DEPENDENCIA,
+			K_CCOSTOS,
+			I_ESTPLA,
+			K_TIPOTRANSA,
+			D_EMAIL,
+			T_TELCEL,
+			F_SOLICITUD,
+			I_DEPMODIFICADA
+		)VALUES(
+			#{k_reposicion},
+			#{identificacion},
+			#{n_nombr1},
+			#{n_nombr2},
+			#{n_apell1},
+			#{n_apell2},
+			#{n_numplastico},
+			#{n_ciudad},
+			#{k_coddependencia},
+			#{n_dependencia},
+			#{k_ccostos},
+			#{i_estpla},
+			#{k_tipotransa},
+			#{d_email},
+			#{t_telcel},
+			to_date(#{f_solicitud} ,'dd/mm/yyyy hh24:mi:ss'),
+			#{i_depmodificada}
+		)
+	</insert>
+
+
+	<select id="obtenerDatosAsociadoTarjeta"
+		parameterType="com.cm.solidappservice.model.datosasociado.bd.DatosAsociadoMD"
+		resultMap="resultDatosAsociadoTarjeta" statementType="CALLABLE">
+		{
+			call PK_APP_SOLITUDCREDITO.PR_DATOSPERSONALESASOCIADO(
+			#{V_AANUMNIT, jdbcType = VARCHAR, javaType=java.lang.String, mode =IN},
+			#{CEDULA, jdbcType = VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{N_APELL1, jdbcType =VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{N_APELL2, jdbcType = VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{N_NOMBR1, jdbcType = VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{N_NOMBR2,  jdbcType = VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{D_EMAIL, jdbcType = VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{TELEFONOFIJO, jdbcType = VARCHAR, javaType=java.lang.String, mode=OUT}, 
+			#{CELULAR, jdbcType = VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{DIRECCION, jdbcType = VARCHAR, javaType=java.lang.String, mode=OUT},
+			#{N_BARRIO, jdbcType = VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{N_CIUDAD, jdbcType = VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{K_CIUDAD, jdbcType = VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{K_DEPART, jdbcType = VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{ESTADOCIVIL, jdbcType = VARCHAR,javaType=java.lang.String, mode=OUT},
+			#{V_SUELDO, jdbcType = INTEGER, javaType=java.lang.Integer, mode =OUT},
+			#{F_ANTIGU, jdbcType = VARCHAR, javaType=java.lang.String, mode =OUT},
+			#{CODIGODEPENDENCIA, jdbcType = VARCHAR,javaType=java.lang.String, mode= OUT},
+			#{N_DEPENDENCIA,jdbcType = VARCHAR, javaType=java.lang.String, mode=OUT},
+			#{CODIGOREGIONAL,jdbcType = VARCHAR, javaType=java.lang.String, mode=OUT},
+			#{N_REGIONAL, jdbcType = VARCHAR, javaType=java.lang.String, mode=OUT}
+		)}
+	</select>
+
+
+	<resultMap id="resultDatosAsociadoTarjeta"
+		type="com.cm.solidappservice.model.datosasociado.bd.DatosAsociadoMD">
+		<result property="cedula" column="CEDULA" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="n_apell1" column="N_APELL1" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="n_apell2" column="N_APELL2" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="n_nombr1" column="N_NOMBR1" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="n_nombr2" column="N_NOMBR2" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="d_email" column="D_EMAIL" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="telefonofijo" column="TELEFONOFIJO" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="celular" column="CELULAR" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="n_ciudad" column="N_CIUDAD" jdbcType="VARCHAR" javaType="java.lang.String" />		
+		<result property="codigodependencia" column="CODIGODEPENDENCIA" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="n_dependencia" column="N_DEPENDENCIA" jdbcType="VARCHAR" javaType="java.lang.String" />
+	</resultMap>
+
+
+</mapper>

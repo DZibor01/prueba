@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AhorrosMapper">
+
+ 	<insert id="crearSolicitudAhorro" 
+	 	parameterType="com.cm.solidappservice.model.ahorros.bd.SolicitudAhorroMD">
+ 		INSERT INTO TAB_APPSOLIAHOP 
+ 		(
+ 			AANUMNIT,
+			K_TIPODR,
+			V_CUOTA,
+			V_PLAZO,
+			F_VIGENCI_FIN,
+			N_DESTIN,
+			ID_DISPOSITIVO,
+			F_SOLICI
+		)VALUES(
+			#{aanumnit},
+			#{k_tipodr},
+			#{v_cuota},
+			#{v_plazo},
+			#{f_vigenci_fin:DATE},
+			#{n_destin},
+			#{id_dispositivo},
+			#{f_solici}
+		)
+ 	</insert>
+
+	<select id="obtenerTiposAhorro" 
+		parameterType="com.cm.solidappservice.model.ahorros.bd.TipoAhorroMD" 
+		resultType="com.cm.solidappservice.model.ahorros.bd.TipoAhorroMD">
+		SELECT K_TIPODR, 
+			N_TIPODR, 
+			V_CUOTA_MIN, 
+			V_CUOTA_MAX, 
+			V_PLAZO_MIN, 
+			V_PLAZO_MAX, 
+			F_VIGENCI_FIN, 
+			I_OBSERV,
+			I_FECHA
+		FROM TAB_APPAHOP WHERE I_ACTIVO = #{i_activo}
+	</select>
+
+	<select id="obtenerDescripcionesTiposAhorro" 
+		parameterType="com.cm.solidappservice.model.ahorros.bd.DescripcionTipoAhorroMD" 
+		resultType="com.cm.solidappservice.model.ahorros.bd.DescripcionTipoAhorroMD">
+		SELECT 
+			K_TIPODR, 
+			Q_ORDEN, 
+			V_DESCRIP
+		FROM 
+			TAB_APPDESCXTIPAHO WHERE K_TIPODR = #{k_tipodr}
+		ORDER BY Q_ORDEN
+	</select>
+
+</mapper>

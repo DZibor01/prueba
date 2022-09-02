@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DatosAsociadoMapper">
+
+	<!-- ConsultarDatosAsociado -->
+	<select id="consultarDatosAsociado"
+		parameterType="com.cm.solidappservice.model.datosasociado.bd.ConsultaDatosAsociadoMD"
+		resultMap="resultConsultarDatosAsociado" 
+		statementType="CALLABLE">
+		{
+			call PK_APP_GESTIONDATOSASOCIADO.PR_CONSULTA_DATOSASOCIADO(
+				#{va_anumnit, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+				#{vn_nombre, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT},
+				#{vd_direcc, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT},
+				#{vt_celular, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT},
+				#{vd_email, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT},
+				#{vn_barrio, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT},
+				#{vk_ciudad, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT},
+				#{vn_ciudad, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT},
+				#{vk_depart, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT},
+				#{vn_depart, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT},
+				#{vk_pais, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT},
+				#{vn_pais, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT}
+			)
+		}
+	</select>
+
+	<resultMap id="resultConsultarDatosAsociado"
+		type="com.cm.solidappservice.model.datosasociado.bd.ConsultaDatosAsociadoMD">
+		<result property="va_anumnit" column="va_anumnit" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="vn_nombre" column="vn_nombre" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="vd_direcc" column="vd_direcc" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="vt_celular" column="vt_celular" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="vd_email" column="vd_email" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="vn_barrio" column="vn_barrio" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="vk_ciudad" column="vk_ciudad" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="vn_ciudad" column="vn_ciudad" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="vk_depart" column="vk_depart" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="vn_depart" column="vn_depart" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="vk_pais" column="vk_pais" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="vn_pais" column="vn_pais" jdbcType="VARCHAR" javaType="java.lang.String" />
+	</resultMap>
+
+	<!-- ActualizaDatosAsociado -->
+	<select id="actualizarDatosAsociado"
+		parameterType="com.cm.solidappservice.model.datosasociado.bd.ActualizaDatosAsociadoMD"
+		statementType="CALLABLE">
+		{
+			call PK_APP_GESTIONDATOSASOCIADO.PR_ACTUALIZA_DATOSASOCIADO(
+				#{vk_actdatos, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+				#{vk_regisdisposi, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+				#{va_anumnit, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+				#{vn_nombre, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+				#{vd_direcc, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+				#{vt_celular, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+				#{vd_email, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+				#{vn_barrio, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+				#{vk_ciudad, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+				#{vk_depart, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+				#{vk_pais, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+				#{v_ip, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+				#{vn_canal, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN}
+			)
+		}
+	</select>
+
+	<select id="obtenerRegistroDatosActualizados" 
+		parameterType="java.lang.String"
+		resultType="com.cm.solidappservice.model.datosasociado.bd.RegistraDatosActualizadosMD">
+		SELECT 	
+			K_ACTDDATOS,
+			A_ANUMNIT,
+			N_NOMBRE, 
+			T_CELULAR,
+			D_EMAIL,
+			K_PAIS,
+			K_DEPART,
+			K_CIUDAD,
+			N_BARRIO,
+			N_DIRECC,
+			F_ACTDATOS,
+			K_REGISTRODISPOS,
+			IP,
+			N_CANAL    
+		FROM 
+			TAB_APPACTDATOS
+		WHERE 
+			A_ANUMNIT = #{a_anumnit}
+		ORDER BY
+			F_ACTDATOS
+	</select>
+	
+	<select id="obtenerTiposVia"
+		resultType="com.cm.solidappservice.model.datosasociado.bd.FormatoDireccionesMD">
+		SELECT RV_ABBREVIATION, RV_MEANING FROM CG_REF_CODES
+            WHERE RV_DOMAIN = 'DM_FORMATDIRECC' AND RV_HIGH_VALUE = 'TIPVIA' ORDER BY RV_MEANING
+	</select>
+
+	<select id="obtenerLetraVia"
+		resultType="com.cm.solidappservice.model.datosasociado.bd.FormatoDireccionesMD">
+		SELECT RV_ABBREVIATION, RV_MEANING FROM CG_REF_CODES
+            WHERE RV_DOMAIN = 'DM_FORMATDIRECC' AND RV_HIGH_VALUE = 'LETRVIA' ORDER BY RV_MEANING
+	</select>
+
+	<select id="obtenerComplementoVia"
+		resultType="com.cm.solidappservice.model.datosasociado.bd.FormatoDireccionesMD">
+		SELECT RV_ABBREVIATION, RV_MEANING FROM CG_REF_CODES
+            WHERE RV_DOMAIN = 'DM_FORMATDIRECC' AND RV_HIGH_VALUE = 'COMPLVIA' ORDER BY RV_MEANING
+	</select>
+
+
+	<select id="consultarDatosBasicosAsociado" 
+		parameterType="com.cm.solidappservice.model.datosasociado.bd.DatosBasicosAsociadoMD"
+		resultMap="resultDatosBasicosAsociado" statementType="CALLABLE">
+		{call PK_APP_GESTIONDATOSASOCIADO.PR_DATOS_BASICOS_ASOCIADO  (
+			#{V_AANUMNIT, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+			#{AANUMNIT, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT},
+			#{IIDETER, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT},
+			#{NAPELL1, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT},
+			#{NAPELL2, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT},
+			#{NNOMBR1, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT},
+			#{NNOMBR2, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT}
+		)}
+	</select>
+
+	<resultMap id="resultDatosBasicosAsociado" 
+		type="com.cm.solidappservice.model.datosasociado.bd.DatosBasicosAsociadoMD">
+		<result property="V_AANUMNIT" column="V_AANUMNIT" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="AANUMNIT" column="AANUMNIT" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="IIDETER" column="IIDETER" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="NAPELL1" column="NAPELL1" jdbcType="VARCHAR" javaType="java.lang.String" /> 
+		<result property="NAPELL2" column="NAPELL2" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="NNOMBR1" column="NNOMBR1" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="NNOMBR2" column="NNOMBR2" jdbcType="VARCHAR" javaType="java.lang.String" />
+	</resultMap>
+
+</mapper>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DispositivoMapper">
+
+
+	<!-- InsertarNuevoDispositivo -->
+	<insert id="insertarNuevoDispositivo"
+		parameterType="com.cm.solidappservice.model.dispositivo.bd.RegistroDispositivoMD">
+		INSERT INTO TAB_APPREGISTRODISPOS
+		(
+			K_REGISTRODISPOS,
+			A_ANUMNIT,
+			N_FABRICANTE,
+			N_MODELO,
+			ID_DISPOSITIVO,
+			K_IMEI,
+			T_CELPRINCIPAL,
+			N_SISTOPERATIVO,
+			K_VERSION,
+			F_REGISTRO
+		)VALUES(
+			#{k_registrodispos},
+			#{a_anumnit},
+			#{n_fabricante},
+			#{n_modelo},
+			#{id_dispositivo},
+			#{k_imei},
+			#{t_celprincipal},
+			#{n_sistoperativo},
+			#{k_version},
+			sysdate
+		)
+	</insert>
+	
+	<select id="obtenerDispositivosRegistrados" parameterType="java.lang.String"
+		resultType="com.cm.solidappservice.model.dispositivo.bd.RegistroDispositivoMD">
+		SELECT 
+			*
+		FROM
+			TAB_APPREGISTRODISPOS
+		WHERE 
+			A_ANUMNIT = #{a_anumnit} AND
+			N_FABRICANTE = #{n_fabricante} AND
+			N_MODELO = #{n_modelo} AND
+			(
+				ID_DISPOSITIVO = #{id_dispositivo} OR
+				K_IMEI = #{k_imei} OR
+				T_CELPRINCIPAL = #{t_celprincipal}
+			)
+	</select>
+
+</mapper>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cm.solidappservice.dao.sqlmap.TokenMapper">
+	<select id="selectToken" resultType="com.cm.solidappservice.model.token.bd.TokenMD">
+		SELECT
+			token,
+			AANUMNIT,
+			fechaGeneracion,
+			fechaExpiracion,
+			I_expirado
+		FROM
+			TAB_APPTOKEN
+		WHERE token = #{id}
+	</select>
+	
+	<insert id="insertToken" parameterType="com.cm.solidappservice.model.token.bd.TokenMD">
+		INSERT INTO TAB_APPTOKEN (
+			token,
+			AANUMNIT,
+			fechaGeneracion,
+			fechaExpiracion,
+			I_expirado,
+			n_origaplic
+		)VALUES(
+			#{token},
+			#{aanumnit},
+			#{fechaGeneracion},
+			#{fechaExpiracion},
+			#{i_expirado},
+			#{n_origaplic}
+		)
+	</insert>
+	
+	<update id="updateToken" parameterType="com.cm.solidappservice.model.token.bd.TokenMD">
+		UPDATE TAB_APPTOKEN SET fechaExpiracion =  #{fechaExpiracion}, I_expirado = #{i_expirado}
+		WHERE token = #{token}
+	</update>
+	
+	<update id="updateOtherToken" parameterType="com.cm.solidappservice.model.token.bd.TokenMD">
+		UPDATE TAB_APPTOKEN SET fechaExpiracion =  #{fechaExpiracion}, I_expirado = 'Y'
+		WHERE token<![CDATA[ <> ]]> #{token} AND AANUMNIT = #{aanumnit} AND I_expirado = 'N'
+	</update>
+
+	<update id="updateNewToken" parameterType="com.cm.solidappservice.model.token.bd.TokenMD">
+		UPDATE TAB_APPTOKEN SET 
+			token = #{token}, 
+			fechaGeneracion = #{fechaGeneracion},
+			fechaExpiracion = #{fechaExpiracion},
+			I_expirado = #{i_expirado}
+		WHERE 
+			token = #{oldToken} AND
+			AANUMNIT = #{aanumnit}
+	</update>
+
+	 
+</mapper>

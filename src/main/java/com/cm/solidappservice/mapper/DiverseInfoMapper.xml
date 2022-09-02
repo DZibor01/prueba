@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="DiverseInfoMapper">
+
+	<select id="selectPortafolio"
+		resultType="com.cm.solidappservice.model.diverseinfo.bd.PortafolioMD">
+		SELECT
+			I_TIPPROD,
+			N_PRODUC,
+			N_CATEGORIA
+		FROM
+			TAB_APP_PORTAFOLIO
+		ORDER BY Q_ORDEN
+	</select>
+	
+	<select id="selectPortafolioDetalle" 
+		resultType="com.cm.solidappservice.model.diverseinfo.bd.PortafolioDetalleMD" 
+		parameterType="com.cm.solidappservice.model.diverseinfo.bd.PortafolioMD">
+		SELECT
+			I_TIPPROD,
+			N_DESCORTA,
+			N_DESLARGA
+		FROM
+			TAB_APP_PORTAFOLIO_DETALLE 
+		WHERE 
+			I_TIPPROD = #{i_tipprod} 
+		ORDER BY Q_ORDEN
+	</select>
+	
+ 	<select id="selectPreguntasFrecuentes" 
+		resultType="com.cm.solidappservice.model.diverseinfo.bd.PreguntasFrecuentesMD">
+		SELECT
+			I_TIPPRE,
+			V_PREGUN,
+			V_RESPUE
+		FROM
+			TAB_APP_PREGUFREC 
+	</select>
+	
+	<select id="obtenerRedesSociales" 
+		resultType="com.cm.solidappservice.model.diverseinfo.bd.RedesSocialesMD">
+		SELECT * FROM TAB_APPREDESSOC
+	</select>
+		
+	<select id="selectDirectorio" 
+		resultType="com.cm.solidappservice.model.diverseinfo.bd.DirectorioMD">
+		SELECT
+			N_NOMBRE,
+			N_TELEFONO,
+			N_TELEUSU,
+			I_ORDEN
+		FROM
+			TAB_APP_DIRECTORIO	 
+		ORDER BY I_ORDEN
+	</select>
+	 	
+	<select id="selectImagenesBeneficios"
+		resultType="com.cm.solidappservice.model.diverseinfo.bd.ImagenBeneficioMD">
+		SELECT
+			K_SERIE,
+			N_URL
+		FROM
+			TAB_APPIMAGEN
+		ORDER BY K_SERIE
+	</select>
+
+	<select id="selectImageLogin" 
+		resultType="com.cm.solidappservice.model.diverseinfo.bd.ImageLoginMD">
+		SELECT
+			K_IMAGENLOGIN,
+			N_URL_IMAGENLOGIN,
+			I_ESTADO
+		FROM
+			TAB_APPIMAGENLOGIN
+		WHERE
+			I_ESTADO = 'Y'
+	</select>
+
+	<select id="obtenerMensajesBanner" 
+		resultType="com.cm.solidappservice.model.diverseinfo.bd.MensajesBannerMD">
+		SELECT * FROM TAB_APPMENSAJES
+	</select>
+
+	<select id="obtenerBannerComercial" parameterType="java.lang.String"
+		resultType="com.cm.solidappservice.model.diverseinfo.bd.BannerComercialMD">
+		SELECT * FROM TAB_APPBANNERS WHERE I_ESTADO = 'S'
+	</select>
+
+	<!-- Trae la lista de otros servicios-->
+	<select id="obtenerMenuMasServicios" parameterType="java.lang.String"
+		resultType="com.cm.solidappservice.model.diverseinfo.bd.MasServiciosMD">
+		SELECT * FROM TAB_APPSERVICIOS
+	</select>
+
+	<select id="selectReplyMessages" 	
+		resultType="com.cm.solidappservice.model.diverseinfo.bd.ReplyMessagesMD">
+		SELECT
+			*
+		FROM
+			TAB_APPMENSAJESRESP 
+	</select>
+	
+
+</mapper>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="LogsApiMapper">
+
+	<insert id="createLogsApi"
+		parameterType="com.cm.solidappservice.model.logsapi.bd.LogsApiMD">
+		INSERT INTO TAB_APPLOGSAPI
+		(
+			K_LOG,
+			AANUMNIT,
+			N_ENDPOINT,
+			N_CONTROLADOR,
+			N_METODO,
+			N_REQUESTBODY,
+			F_INICIOPETICION
+		)VALUES(
+			#{k_log},
+			#{aanumnit},
+			#{n_endpoint},
+			#{n_controlador},
+			#{n_metodo},
+			#{n_requestbody},
+			#{f_iniciopeticion}
+		)
+	</insert>
+
+	<update id="updateLogsApi" 
+		parameterType="com.cm.solidappservice.model.logsapi.bd.LogsApiMD">
+	 	UPDATE TAB_APPLOGSAPI SET 
+		 	N_RESPONSEBODY =  #{n_responsebody}, 
+		 	N_RESULTADO = #{n_resultado}, 
+			N_ERROR = #{n_error},
+			F_FINPETICION = #{f_finpeticion}
+	 	WHERE 
+		 	K_LOG = #{k_log}
+	 </update>
+
+</mapper>

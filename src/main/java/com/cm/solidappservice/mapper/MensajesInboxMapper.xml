@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MensajesInboxMapper">
+
+	<select id="obtenerMensajesInbox" 
+		parameterType="com.cm.solidappservice.model.mensajesinbox.bd.MensajesInboxMD" 
+		resultType="com.cm.solidappservice.model.mensajesinbox.bd.MensajesInboxMD">
+		SELECT
+			K_PROCES,
+			I_LEIDO,
+			AANUMNIT,
+			F_INICIO,
+			F_FINAL,
+			N_MENSAJ,
+			N_TIPO
+		FROM 
+			TAB_APPNOTIFICA
+		WHERE AANUMNIT = #{aanumnit}
+			AND F_INICIO <![CDATA[ < ]]>= #{f_inicio} AND F_FINAL >= #{f_final}
+		ORDER BY K_PROCES DESC
+	</select>
+	
+	 <insert id="enviarMensajeInbox"
+		parameterType="com.cm.solidappservice.model.mensajesinbox.bd.MensajesInboxMD">
+		INSERT INTO TAB_APPNOTIFICA
+		(
+			AANUMNIT,
+			F_INICIO,
+			F_FINAL,
+			N_MENSAJ,
+			Q_ORDEN,
+			K_PROCES,
+			I_LEIDO,
+			N_TIPO
+		)VALUES(
+			#{aanumnit},
+			to_date(#{f_inicio} ,'dd/mm/yyyy'),
+			to_date(#{f_final} ,'dd/mm/yyyy'),
+			#{n_mensaj},
+			#{q_orden},
+			#{k_proces},
+			#{i_leido},
+			#{n_tipo}
+		)
+	</insert>
+
+	<insert id="actualizarMensajeLeido" 
+		parameterType="com.cm.solidappservice.model.mensajesinbox.bd.MensajesInboxMD">
+ 		UPDATE 
+ 			TAB_APPNOTIFICA SET I_LEIDO = #{i_leido} 
+		WHERE 
+			AANUMNIT = #{aanumnit} AND K_PROCES = #{k_proces}
+	 </insert>
+</mapper>

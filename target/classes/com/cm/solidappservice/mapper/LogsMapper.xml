@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="LogsMapper">
+
+	<insert id="registrarLogsError"
+		parameterType="com.cm.solidappservice.model.logs.bd.LogErrorMD">
+		INSERT INTO TAB_APPLOGERROR
+		(
+			A_ANUMNIT,
+			N_ORIGEN,
+			N_ERROR,
+			F_REGISTRO
+		)VALUES(
+			#{a_anumnit},
+			#{n_origen},
+			#{n_error},
+			#{f_registro}
+		)
+	</insert>
+</mapper>

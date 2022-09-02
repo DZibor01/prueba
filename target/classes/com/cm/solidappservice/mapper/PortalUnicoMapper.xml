@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PortalUnicoMapper">
+
+	<insert id="registrarIngresos"
+		parameterType="com.cm.solidappservice.model.portalunico.bd.RegistroIngresosMD">
+		INSERT INTO TAB_APPLOGINPORTALUNICO
+		(
+			AANUMNIT,
+			I_ACEPTACION,
+			F_LOGIN
+		)VALUES(
+			#{aanumnit},
+			#{i_aceptacion},
+			to_date(#{f_login} ,'dd/mm/yyyy hh24:mi:ss')
+		)
+	</insert>
+	
+	<select id="obtenerBannerLogin" parameterType="java.lang.String"
+		resultType="com.cm.solidappservice.model.diverseinfo.bd.BannerComercialMD">
+		SELECT * FROM TAB_APPBANNERS WHERE I_ESTADOPORTAL = 'S'
+	</select>
+
+	<!-- <insert id="registrarTransaccionCertificado"
+		parameterType="com.cm.solidappservice.model.portalunico.bd.CertificadoLibertadMD">
+		INSERT INTO PTEAPP.TAB_APPTRANCERTLIBER
+		( 
+			K_TRANSACCION, 
+			N_NOMBRE,
+			A_ANUMNIT,
+			K_IDTERC,
+			D_EMAIL, 
+			T_TELCEL, 
+			F_SOLICITUD, 
+			V_VALORCERT, 
+			V_VALORTOTAL,
+			I_PAGO_CREDITO,
+			A_NUMCTA,                
+			K_NUMDOC_MOV,
+			I_ESTADOTRANSACCION,
+			I_ESTADOHEADER, 
+			I_ESTADODEBITO, 
+			I_ESTADOCREDITO
+		)
+		VALUES
+		(
+			#{k_transaccion},
+			#{n_nombre},
+			#{a_anumnit},
+			NVL(#{a_anumnit}, '0'),
+			V_D_EMAIL,
+			V_T_TELCEL,
+			TO_DATE(V_F_SOLICITUD, 'DD/MM/YYYY hh24:mi:ss'),  
+			V_VALOR_CERT,
+			V_VALOR_TOTAL,
+			V_A_NUMCTA, 
+			N_K_NUMDOC,
+			'C',
+			I_ESTADOHEADER, 
+			I_ESTADODEBITO, 
+			I_ESTADOCREDITO
+		);
+	</insert> -->
+
+	<insert id="registrarPropiedadesCertificado"
+		parameterType="com.cm.solidappservice.model.portalunico.bd.PropiedadesCertLibertadMD">
+		INSERT INTO PTEAPP.TAB_APPPROPCERTLIBER
+		(
+			K_PROPIEDAD,
+			K_TRANSACCION,
+			A_NUMMATRICULA,
+			D_DIRECCION,
+			K_DEPART,
+			N_DEPART,
+			K_CIUDAD,
+			N_CIUDAD
+		)VALUES(
+			SEQ_AUTOINCREPROPCERTLIBER.NEXTVAL,
+			#{k_transaccion},
+			#{a_nummatricula},
+			#{d_direccion},
+			#{k_depart},
+			#{n_depart},
+			#{k_ciudad},
+			#{n_ciudad}
+		)
+	</insert>
+
+	<select id="registrarTransaccionCert"
+		parameterType="com.cm.solidappservice.model.portalunico.bd.CompraCertificadoMD"
+		resultMap="resultRegistrarTransaccionCert" statementType="CALLABLE">
+		{
+			call PTEAPP.PK_APP_TRANSA.PR_REGISTRA_TRANSA_CERTYLIBER
+			(
+				#{V_K_TRANSA, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+				#{V_AANUMNIT, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+				#{V_N_NOMBRE, jdbcType =VARCHAR, javaType=java.lang.String, mode = IN},
+				#{V_D_EMAIL, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+				#{V_T_TELCEL, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+				#{V_VALOR_TOTAL, jdbcType = INTEGER, javaType=java.lang.Integer, mode = IN},
+				#{V_PAGO_CREDITO, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},				
+				#{V_A_NUMCTA, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+				#{V_F_SOLICITUD, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+				#{V_RESULT, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT},
+				#{V_MESSAGE_ERROR, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT}
+			)
+		}
+	</select>
+
+	<resultMap id="resultRegistrarTransaccionCert"
+		type="com.cm.solidappservice.model.portalunico.bd.CompraCertificadoMD">
+		<result property="v_k_transa" column="V_K_TRANSA" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="v_aanumnit" column="V_AANUMNIT" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="v_n_nombre" column="V_N_NOMBRE" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="v_d_email" column="V_D_EMAIL" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="v_t_teltel" column="V_T_TELCEL" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="v_valor_total" column="V_VALOR_TOTAL" jdbcType="NUMERIC" javaType="java.lang.Integer" />
+		<result property="v_pago_credito" column="V_PAGO_CREDITO" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="v_a_numcta" column="V_A_NUMCTA" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="v_f_solicitud" column="V_F_SOLICITUD" jdbcType="VARCHAR" javaType="java.lang.String" />		
+		<result property="v_result" column="V_RESULT" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="v_message_error" column="V_MESSAGE_ERROR" jdbcType="VARCHAR" javaType="java.lang.String" />
+	</resultMap>
+
+	<select id="obtenerHistorialVotaciones"
+		resultType="com.cm.solidappservice.model.portalunico.bd.RegistroVotacionesMD">
+		SELECT * FROM PTEAPP.TAB_APPREGISTROVOTACION;
+	</select>
+
+	<insert id="agregarHistorialVotacion"
+		parameterType="com.cm.solidappservice.model.portalunico.bd.RegistroVotacionesMD">
+		INSERT INTO TAB_APPREGISTROVOTACION
+		(
+			A_ANUMNIT,
+			F_INGRESO
+		)VALUES(
+			#{a_anumnit},
+			to_date(#{f_ingreso} ,'dd/mm/yyyy hh24:mi:ss')
+		)
+	</insert>
+
+</mapper>

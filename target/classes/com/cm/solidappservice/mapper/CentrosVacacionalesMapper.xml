@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CentrosVacacionalesMapper">
+
+	<select id="cargarListado" resultType="com.cm.solidappservice.model.centrosvacacionales.bd.CentroVacacionalMD">
+		SELECT
+			K_CENVAC,
+			N_CENVAC,
+			D_CENVAC,
+			K_PERUNI,
+			N_PERUNI
+		FROM
+			VIEW_APP_CV
+		ORDER BY K_CENVAC
+	</select>	
+
+	<insert id="crearSolicitudCentroVacacional" parameterType="com.cm.solidappservice.model.centrosvacacionales.bd.SolicitudCentroVacacionalMD">
+ 		INSERT INTO TAB_APP_SOLICV
+ 		(
+			AANUMNIT,        
+			I_ASOUSA,    
+			Q_TOTADU,        
+			Q_TOTNIN,        
+			K_CENVAC,        
+			K_PERUNI,        
+			F_LLEGAD,        
+			Q_PERMAN,        
+			O_OBSERV,        
+			ID_DISPOSITIVO,
+			D_EMAIL
+		)VALUES(
+			#{aanumnit},
+			#{i_asousa},
+			#{q_totadu},
+			#{q_totnin},
+			#{k_cenvac},
+			#{k_peruni},
+			#{f_llegad},
+			#{q_perman},
+			#{o_observ},
+			#{id_dispositivo},
+			#{d_email}
+		)
+ 	</insert>
+</mapper>

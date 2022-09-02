@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AdelantoNominaMapper">
+
+
+	<!-- Valida Requisitos -->
+	<select id="validarParametrosFunction"
+		parameterType="com.cm.solidappservice.model.adelantonomina.bd.ValidarRequisitosMD"
+		resultMap="resultValidarParametros" statementType="CALLABLE">
+		{
+			call LINIX.pk_pst_evaluarequisito_avance.pr_almacenayevalua_requistos(
+			#{k_supreq, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+			#{n_aanumnit, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+			#{k_modali, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+			#{f_corte, jdbcType = DATE, javaType=java.util.Date, mode = IN},
+			#{k_identificador, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+			#{CUMPLE, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT}
+		)}
+	</select>
+
+	<resultMap id="resultValidarParametros"
+		type="com.cm.solidappservice.model.adelantonomina.bd.ValidarRequisitosMD">
+		<result property="k_supreq" column="k_supreq" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="n_aanumnit" column="n_aanumnit" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="k_modali" column="k_modali" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="f_corte" column="f_corte" jdbcType="DATE" javaType="java.util.Date" />
+		<result property="k_identificador" column="k_identificador" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="CUMPLE" column="CUMPLE" jdbcType="VARCHAR" javaType="java.lang.String" />
+	</resultMap>
+
+
+	<!-- Valida porque no cumple -->
+	<select id="obtenerNoCumple" parameterType="java.lang.String"
+		resultType="com.cm.solidappservice.model.adelantonomina.bd.MotivosNoCumpleMD">
+		SELECT 
+			K_AANUMNIT,
+			N_REQUISITO,
+			N_CUMPLE,
+			N_OBSERVACION,
+			F_EVALUACION,
+			K_IDENTIFICADOR
+		FROM LINIX.TAB_ADNREQUISITOS
+			WHERE 
+			K_IDENTIFICADOR = #{k_identificador} AND
+			N_REQUISITO = #{n_requisito}
+	</select>
+
+	<!-- Obtiene el valor de comisión -->	
+	<select id="obtenerValorComision" parameterType="java.lang.String"
+		resultType="com.cm.solidappservice.model.adelantonomina.bd.ValorComisionMD">
+		SELECT  SUM(V_CRGDCT) 
+			AS VALOR  
+			FROM CA085MDCARGDES
+				WHERE K_MODALI = (SELECT MIN( O_ALFABE) 
+			FROM GR040TPARAMETR 
+				WHERE K_PARAME  = 917)
+	</select>
+
+
+	<!-- Obtiene el valor cupo máximo y minimo -->
+	<select id="obtenerValoresFunction"
+		parameterType="com.cm.solidappservice.model.adelantonomina.bd.TopesMD"
+		resultMap="resultObtenerValores" statementType="CALLABLE">
+		{call pk_pst_adelanto_nomina.pr_valor_cupo(
+				#{n_aanumnit, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+				#{f_corte, jdbcType = DATE, javaType=java.util.Date, mode = IN},
+				#{v_cupo, jdbcType = INTEGER, javaType=java.lang.Integer, mode = OUT},
+				#{v_minimo, jdbcType = INTEGER, javaType=java.lang.Integer, mode = OUT},
+				#{v_maximo, jdbcType = INTEGER, javaType=java.lang.Integer, mode = OUT}			
+		)}
+	</select>
+
+	<resultMap id="resultObtenerValores"
+		type="com.cm.solidappservice.model.adelantonomina.bd.TopesMD">
+		<result property="n_aanumnit" column="n_aanumnit" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="f_corte" column="f_corte" jdbcType="DATE" javaType="java.util.Date" />
+		<result property="v_cupo" column="v_cupo" jdbcType="NUMERIC" javaType="java.lang.Integer" />
+		<result property="v_minimo" column="v_minimo" jdbcType="NUMERIC" javaType="java.lang.Integer" />
+		<result property="v_maximo" column="v_maximo" jdbcType="NUMERIC" javaType="java.lang.Integer" />
+	</resultMap>
+
+
+	<!-- Inserta la solicitud del adelanto de nómina -->
+	<select id="adelantarNominaFunction"
+		parameterType="com.cm.solidappservice.model.adelantonomina.bd.AdelantoNominaMD"
+		resultMap="resultAdelantoNomina" statementType="CALLABLE">
+		{call pk_pst_app_avance_nomina.pr_inserta_solicitud(
+			#{n_aanumnit, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+			#{v_monto, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+			#{f_solici, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+			#{k_nroSolici, jdbcType = VARCHAR, javaType=java.lang.String, mode = IN},
+			#{n_resultado, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT},
+			#{n_error, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT},
+			#{v_k_flujo, jdbcType = INTEGER, javaType=java.lang.Integer, mode = OUT}
+		)}
+	</select>
+
+	<resultMap id="resultAdelantoNomina"
+		type="com.cm.solidappservice.model.adelantonomina.bd.AdelantoNominaMD">
+		<result property="f_solici" column="f_solici" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="k_nroSolici" column="k_nroSolici" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="v_monto" column="v_monto" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="n_resultado" column="n_resultado" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="n_error" column="n_error" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="v_k_flujo" column="v_k_flujo" jdbcType="NUMERIC" javaType="java.lang.Integer" />
+	</resultMap>
+
+	<!-- Consulta la solicitud del adelanto de nómina -->
+	<select id="adelantarNominaConsultarSolicitud"
+		parameterType="com.cm.solidappservice.model.adelantonomina.bd.ConsultaSolicitudAdelantoMD"
+		resultMap="resultAdelantoNominaConsulta" statementType="CALLABLE">
+		{call LINIX.pk_pst_app_avance_nomina.pr_consulta_solicitud(
+			#{v_k_flujo, jdbcType = INTEGER, javaType=java.lang.Integer, mode = IN},
+			#{a_numnit, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT},
+			#{f_solici, jdbcType= DATE, javaType = java.sql.Date, mode = OUT},
+			#{v_solici, jdbcType= INTEGER, javaType = java.lang.Integer, mode = OUT},
+			#{k_ano, jdbcType = INTEGER, javaType=java.lang.Integer, mode = OUT},
+			#{k_sucurs, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT},
+			#{k_tipdoc, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT},
+			#{k_numdoc, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT},
+			#{f_primera, jdbcType = DATE, javaType=java.sql.Date, mode = OUT},			
+			#{a_tipodr, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT},
+			#{a_obliga, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT},
+			#{n_resultado, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT},
+			#{n_error, jdbcType = VARCHAR, javaType=java.lang.String, mode = OUT}
+		)}
+	</select>
+
+	<resultMap id="resultAdelantoNominaConsulta"
+		type="com.cm.solidappservice.model.adelantonomina.bd.ConsultaSolicitudAdelantoMD">
+		<result property="v_k_flujo" column="v_k_flujo" jdbcType="NUMERIC" javaType="java.lang.Integer" />
+		<result property="a_numnit" column="a_numnit" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="f_solici" column="f_solici" jdbcType="DATE" javaType="java.sql.Date" />
+		<result property="v_solici" column="v_solici" jdbcType="NUMERIC" javaType="java.lang.Integer" />
+		<result property="k_ano" column="k_ano" jdbcType="NUMERIC" javaType="java.lang.Integer" />
+		<result property="k_sucurs" column="k_sucurs" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="k_tipdoc" column="k_tipdoc" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="f_primera" column="f_primera" jdbcType="DATE" javaType="java.sql.Date" />
+		<result property="k_numdoc" column="k_numdoc" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="a_tipodr" column="a_tipodr" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="a_obliga" column="a_obliga" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="n_resultado" column="n_resultado" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="n_error" column="n_error" jdbcType="VARCHAR" javaType="java.lang.String" />
+	</resultMap>
+
+
+	<!-- Inserta los datos de adelanto nomina si todo fue exitoso -->
+	<insert id="insertarAdelantoN"
+		parameterType="com.cm.solidappservice.model.adelantonomina.bd.AdelantoNominaMD">
+		INSERT INTO TAB_APPTRANADELANTON
+		(
+			K_TRANSA,
+			AANUMNIT,
+			F_SOLICTUD,
+			V_SOLICITADO,
+			V_VALORCRE,
+			V_CUPO,
+			I_ESTADO,
+			N_ERROR,
+			K_FLUJO,
+			I_ACEPTACION,
+			F_ACEPTACION,
+			IP
+		)VALUES(
+			#{k_transa},
+			#{aanumnit},
+			to_date(#{f_solictud} ,'dd/mm/yyyy hh24:mi:ss'),
+			#{v_solicitado},
+			#{v_valorcre},
+			#{v_cupo},
+			#{i_estado},
+			#{n_error},
+			#{k_flujo},
+			#{i_aceptacion},
+			to_date(#{f_aceptacion} ,'dd/mm/yyyy hh24:mi:ss'),
+			#{ip}
+		)
+	</insert>
+
+
+	<!-- Actualiza los datos de adelanto nomina si todo la consulta fue exitosa -->
+	<update id="actualizarAdelantoNDeprecated"
+		parameterType="com.cm.solidappservice.model.adelantonomina.bd.AdelantoNominaMD">
+		UPDATE TAB_APPTRANADELANTON SET 
+			I_ESTADO = #{i_estado},
+			N_ERROR = #{n_error},
+			K_TIPODR = #{k_tipodr},
+			K_NUMDOC = #{k_numdoc},
+			F_PRIMCUOTA = #{f_primcuota}
+		WHERE 
+			K_FLUJO = #{k_flujo} AND
+			AANUMNIT = #{aanumnit} 
+	</update>
+	<!-- Actualiza los datos de adelanto nomina si todo la consulta fue exitosa -->
+	<update id="actualizarAdelantoN"
+		parameterType="com.cm.solidappservice.model.adelantonomina.bd.AdelantoNominaMD">
+		UPDATE TAB_APPTRANADELANTON SET 
+			I_ESTADO = #{i_estado},
+			N_ERROR = #{n_error},
+			K_TIPODR = #{k_tipodr},
+			K_NUMDOC = #{k_numdoc},
+			F_PRIMCUOTA = #{f_primcuota}
+		WHERE 
+			K_FLUJO = #{k_flujo} AND
+			AANUMNIT = #{aanumnit} AND
+			I_ESTADO = 'E'
+	</update>
+
+	<!-- Obtiene los movimientos -->
+	<select id="obtenerMovimientos" parameterType="java.lang.String"
+		resultType="com.cm.solidappservice.model.adelantonomina.bd.AdelantoNominaMD">
+		SELECT 
+			K_TRANSA,
+			AANUMNIT,
+			F_SOLICTUD,
+			V_SOLICITADO,
+			V_CUPO,
+			I_ESTADO,
+			N_ERROR,
+			K_TIPODR,
+			K_NUMDOC,
+			V_VALORCRE,
+			F_PRIMCUOTA,
+			K_FLUJO,
+			I_ACEPTACION,
+			F_ACEPTACION,
+			IP
+		FROM
+			TAB_APPTRANADELANTON
+		WHERE AANUMNIT = #{value}
+	</select>
+
+	<!-- Selecciona los Tips Financieros -->
+	<select id="selectTips"
+		resultType="com.cm.solidappservice.model.adelantonomina.bd.TipsMD">
+		SELECT
+			K_TIP,
+			N_TIP
+		FROM
+			TAB_APPTIPS
+		ORDER BY K_TIP
+	</select>
+
+	
+
+	<!-- Obtiene el valor de comisión -->
+	<insert id="crearRegistroAdelantoNomina"
+		parameterType="com.cm.solidappservice.model.adelantonomina.bd.LogErrorAdelantoNominaMD">
+		INSERT INTO TAB_APPLOGADELANTON
+		(
+			K_LOG,
+			AANUMNIT,
+			F_REGISTRO,
+			N_ACCION,
+			N_DESCR
+		)VALUES(
+			#{k_log},
+			#{aanumnit},
+			#{f_registro},
+			#{n_accion},
+			#{n_descr}
+		)
+	</insert>
+
+</mapper>

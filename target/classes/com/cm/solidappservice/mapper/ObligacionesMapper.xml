@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ObligacionesMapper">
+
+ 	<insert id="crearPagoObligacion" 
+	 parameterType="com.cm.solidappservice.model.obligaciones.bd.PagoObligacionMD">
+ 		INSERT INTO TAB_APPMVMVTO 
+ 		(
+			ID_DISPOSITIVO,
+			AANUMNIT,
+			V_VALOR,      
+			F_MOVIMI,      
+			K_TIPODR,     
+			N_TIPODR,      
+			A_TIPODR,      
+			A_NUMDOC,      
+			N_PRODUC,      
+			A_NUMCTA
+		)VALUES(
+			#{id_dispositivo},
+			#{aanumnit},
+			#{v_valor},   
+			#{f_movimi},      
+			#{k_tipodr},    
+			#{n_tipodr},     
+			#{a_tipodr},
+			#{a_numdoc},    
+			#{n_produc},     
+			#{a_numcta}
+		)
+	</insert>
+	 
+	 <!-- Selecciona las transferencias que no se completaron -->
+	<select id="obtenerPagosIncompletos" 
+	parameterType="com.cm.solidappservice.model.obligaciones.bd.PagoObligacionMD"
+	resultType="com.cm.solidappservice.model.obligaciones.bd.PagoObligacionMD">
+		SELECT 
+			*
+		FROM
+			TAB_APPMVMVTO
+		WHERE 
+			AANUMNIT = #{aanumnit} AND
+			F_MOVIMI >= SYSDATE-(1/24) AND        
+			K_ANO_MOV IS NULL AND
+			K_SUCURS_MOV IS NULL AND
+			K_TIPDOC_MOV IS NULL AND
+			K_NUMDOC_MOV IS NULL AND
+			N_MOVIMI IS NULL
+	</select>
+
+</mapper>

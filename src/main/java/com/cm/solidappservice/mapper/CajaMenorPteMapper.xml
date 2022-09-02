@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CajaMenorPteMapper">
+<insert id="crearRegistro" parameterType="com.cm.solidappservice.model.cajamenorpte.bd.CajaMenorPteMD">
+ 		INSERT INTO PTECAJAMENOR 
+ 		(
+			k_numdoc,
+			k_perano,
+			k_cencos,
+			n_cencos,
+			f_movimi,
+			n_movimi,
+			o_numdoc,
+			k_codocn,
+			n_cocnep,
+			a_numnit,
+			nnomter,
+			k_cencos_det,
+			n_cencos_det,
+			v_gasto,
+			v_iva,
+			v_inpoco,
+			aanumnit_res,
+			nnomter_res,
+			aanumnit_caj,
+			nnomter_caj,
+			id_registro,
+			id_nova
+		)VALUES(
+			#{k_numdoc},
+			#{k_perano},
+			#{k_cencos},
+			#{n_cencos},
+			#{f_movimi},
+			#{n_movimi},
+			#{o_numdoc},
+			#{k_codocn},
+			#{n_cocnep},
+			#{a_numnit},
+			#{nnomter},
+			#{k_cencos_det},
+			#{n_cencos_det},
+			#{v_gasto},
+			#{v_iva},
+			#{v_inpoco},
+			#{aanumnit_res},
+			#{nnomter_res},
+			#{aanumnit_caj},
+			#{nnomter_caj},
+			#{id_registro},
+			#{id_nova}
+		)
+ 	</insert>
+</mapper>
