@@ -6,6 +6,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.cm.solidappservice.helpers.scopeConstantes;
 import com.cm.solidappservice.manager.MensajesInboxManager;
 import com.cm.solidappservice.model.base.ResponseConstantes;
 import com.cm.solidappservice.model.base.BaseResponse;
@@ -28,8 +29,10 @@ public class MensajesInboxActualizacionDeprecated extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public BaseResponse<String> actualizarLecturaMensaje(RequestActualizarLectura request) {	
 		try {
-			ResponseValidacionParametros validacion = validateParameter(request);
+			ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_ACTUALIZARNOTIFICACIONUSUARIO);
 			if (!validacion.isValid()) {
+				validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
 				return new BaseResponse<String>(
 					validacion.getErrorParametros(),
 					validacion.getErrorParametros(),

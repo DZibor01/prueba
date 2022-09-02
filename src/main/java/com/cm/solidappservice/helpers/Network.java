@@ -1,12 +1,19 @@
 package com.cm.solidappservice.helpers;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 import java.net.URL;
-
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.codehaus.jettison.json.JSONObject;
 
 public class Network {
@@ -78,5 +85,77 @@ public class Network {
             }
         }
     }
+    
+    //NUEVAS PETICIONES PARA LA CONEXION CON LA API DE SEGURIDAD
+    
+    public String checkToken(String token, String scope, String basicEncode) throws Exception {
+    	String response = "";
+    	HttpURLConnection con = null;
+    	try {
+        	String peticion = "CheckToken";
+        	String ruta = urlWebService + peticion;
+        	URL url = new URL(ruta);
+        	//invalidateCertificate();
+            con = (HttpURLConnection) url.openConnection();
+            con.setReadTimeout(40000);
+            con.setConnectTimeout(40000);
+            con.setInstanceFollowRedirects( false );
+            con.setDoOutput(true);
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Authorization", "Basic " + basicEncode);
+            
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+        	params.add(new BasicNameValuePair("token", token));
+        	params.add(new BasicNameValuePair("scopes", scope));
 
+        	OutputStream os = con.getOutputStream();
+        	BufferedWriter writer = new BufferedWriter(
+        	        new OutputStreamWriter(os, "UTF-8"));
+        	writer.write(getQuery(params));
+        	writer.flush();
+        	writer.close();
+        	os.close();
+            con.connect();
+            
+            int responseCode = con.getResponseCode();
+            if(responseCode != HttpURLConnection.HTTP_OK) {
+            	throw new Exception("status!=200");
+            	//return "ERROR!=200";
+            }else {
+            	String line;
+                BufferedReader br=new BufferedReader(new InputStreamReader(con.getInputStream()));
+                while ((line=br.readLine()) != null) {
+                    response+=line;
+                }
+                return response;
+            }
+        }catch(Exception ex){
+        	closeConnection(con);
+        	throw new Exception(ex.getMessage());
+        	//return "ERROR";
+        }finally {
+            closeConnection(con);
+        }
+    }
+    
+    //helpers
+    private String getQuery(List<NameValuePair> params) throws UnsupportedEncodingException
+    {
+        StringBuilder result = new StringBuilder();
+        boolean first = true;
+
+        for (NameValuePair pair : params)
+        {
+            if (first)
+                first = false;
+            else
+                result.append("&");
+
+            result.append(URLEncoder.encode(pair.getName(), "UTF-8"));
+            result.append("=");
+            result.append(URLEncoder.encode(pair.getValue(), "UTF-8"));
+        }
+
+        return result.toString();
+    }
 }

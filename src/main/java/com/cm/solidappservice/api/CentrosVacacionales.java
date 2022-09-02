@@ -9,6 +9,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.cm.solidappservice.helpers.scopeConstantes;
 import com.cm.solidappservice.manager.CentrosVacacionalesManager;
 import com.cm.solidappservice.model.base.RequestAutenticacion;
 import com.cm.solidappservice.model.base.ResponseConstantes;
@@ -33,8 +34,10 @@ public class CentrosVacacionales extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public BaseResponse<List<ResponseCentroVacacional>> getCentrosVacacionales(RequestAutenticacion request) {
 		try {
-			ResponseValidacionParametros validacion = validateParameter(request);
+			ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_CENTROSVACACIONALES);
 			if (!validacion.isValid()) {
+				validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
 				return new BaseResponse<List<ResponseCentroVacacional>>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),
@@ -66,8 +69,10 @@ public class CentrosVacacionales extends BaseService {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		String idLog = String.valueOf(timestamp.getTime());
 		try {
-			ResponseValidacionParametros validacion = validateParameter(request);
+			ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_CENTROSVACACIONALES_CREARSOLICITUD);
 			if (!validacion.isValid()) {
+				validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
 				actualizarLogApi(idLog, "", "ERROR", validacion.getErrorToken() + validacion.getErrorParametros());
 				return new BaseResponse<String>(
                     validacion.getErrorParametros(),

@@ -1,5 +1,6 @@
 package com.cm.solidappservice.api;
 
+import com.cm.solidappservice.helpers.scopeConstantes;
 import com.cm.solidappservice.manager.VotacionesManager;
 import com.cm.solidappservice.model.base.BaseResponse;
 import com.cm.solidappservice.model.base.RequestAutenticacion;
@@ -31,8 +32,10 @@ public class Votaciones extends BaseService {
     @Produces(MediaType.APPLICATION_JSON)
     public BaseResponse<List<ResponseCandidato>> obtenerCandidatos(RequestAutenticacion request) {
         try {
-            ResponseValidacionParametros validacion = validateParameter(request);
+            ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_VOTACIONES_OBTENERCANDIDATOS);
             if (!validacion.isValid()){
+            	validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
                 return new BaseResponse<List<ResponseCandidato>>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),
@@ -62,8 +65,10 @@ public class Votaciones extends BaseService {
     @Produces(MediaType.APPLICATION_JSON)
     public BaseResponse<String> registrarVoto(RequestRegistrarVoto request) {
         try {
-            ResponseValidacionParametros validacion = validateParameter(request);
+            ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_VOTACIONES_REGISTRARVOTO);
             if (!validacion.isValid()){
+            	validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
                 return new BaseResponse<String>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),

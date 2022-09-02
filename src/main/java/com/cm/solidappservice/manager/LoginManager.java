@@ -124,5 +124,27 @@ public class LoginManager {
 			new Utilities().sendMail2(parameter.getV_email(), parameter.getV_vclave(), "Recuperación Clave Presente", "1");
 		}
 	}
+	
+	// CAMBIOS PARA IMPLEMENTACION DE WSO2
+	
+	public ResponseResultadoAutenticacion autenticarUsuarioNew(String cedulaUsuario, String token) throws CustomException, Exception {
+
+		String fechaUltimoIngreso = LoginDAO.getInstance().fechaUltimoIngreso(cedulaUsuario);
+		String topeTransacciones = getTopeTransacciones();
+		//TokenManager.getInstance().GenerarTokenWso2(cedulaUsuario, origen, token);
+		String nombre = DatosAsociadoManager.getInstance().consultarDatosAsociadoNew(cedulaUsuario).getNombreCompleto().split(" ")[0];
+		DatosActualizados tieneDatosActualizados = DatosAsociadoManager.getInstance().validarDatosActualizados(cedulaUsuario);
+		String aceptoUltimosTyC = TyCManager.getInstance().getValidarTerminosAceptados(cedulaUsuario);
+
+		ResponseResultadoAutenticacion response = new ResponseResultadoAutenticacion();
+		response.setCedula(cedulaUsuario);
+		//response.setToken(token);
+		response.setNombreAsociado(nombre);
+		response.setTopeTransacciones(topeTransacciones);
+		response.setFechaUltimoIngreso(fechaUltimoIngreso);
+		response.setAceptoUltimosTyC(aceptoUltimosTyC);
+		response.setDatosActualizados(tieneDatosActualizados);
+		return response;
+	}
 
 }

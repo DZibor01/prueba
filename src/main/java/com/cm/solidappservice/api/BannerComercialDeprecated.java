@@ -1,5 +1,6 @@
 package com.cm.solidappservice.api;
 
+import com.cm.solidappservice.helpers.scopeConstantes;
 import com.cm.solidappservice.manager.DiverseInfoManager;
 import com.cm.solidappservice.model.base.RequestAutenticacion;
 import com.cm.solidappservice.model.base.ResponseConstantes;
@@ -32,8 +33,10 @@ public class BannerComercialDeprecated extends BaseService {
     @Produces(MediaType.APPLICATION_JSON)
     public BaseResponse<List<BannerComercialMD>> obtenerBannerComercial(RequestAutenticacion request) {
         try {
-            ResponseValidacionParametros validacion = validateParameter(request);
+            ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_MENSAJES_BANNERMP);
             if (!validacion.isValid()){
+            	validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
                 return new BaseResponse<List<BannerComercialMD>>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),

@@ -9,6 +9,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.cm.solidappservice.helpers.scopeConstantes;
 import com.cm.solidappservice.manager.AhorrosManager;
 import com.cm.solidappservice.model.base.ResponseConstantes;
 import com.cm.solidappservice.model.ahorros.request.RequestSolicitudAhorro;
@@ -37,8 +38,10 @@ public class Ahorros extends BaseService {
 		String idLog = String.valueOf(timestamp.getTime());
 		try {
 			crearLogApi(idLog, request.getCedula(), "/crearSolicitudAhorro/", "SolicitudAhorro", "POST", request);
-			ResponseValidacionParametros validacion = validateParameter(request);
+			ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_AHORROS_CREARSOLICITUDAHORRO);
 			if (!validacion.isValid()) {
+				validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
 				actualizarLogApi(idLog, "", "ERROR", validacion.getErrorToken() + validacion.getErrorParametros());
 				return new BaseResponse<String>(
                     validacion.getErrorParametros(),
@@ -71,8 +74,10 @@ public class Ahorros extends BaseService {
     @Produces(MediaType.APPLICATION_JSON)
     public BaseResponse<List<ResponseTipoAhorroDisponible>> getTiposAhorroDisponibles(RequestAutenticacion request) {
         try {
-			ResponseValidacionParametros validacion = validateParameter(request);
+			ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_AHORROS_TIPOSAHORRODISPONIBLE);
 			if (!validacion.isValid()) {
+				validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
 				return new BaseResponse<List<ResponseTipoAhorroDisponible>>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),

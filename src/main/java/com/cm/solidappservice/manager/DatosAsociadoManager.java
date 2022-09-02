@@ -163,5 +163,29 @@ public class DatosAsociadoManager {
 			model.getNNOMBR2()
 		);
 	}
+	
+	// CAMBIOS PARA IMPLEMENTACION DE WSO2
+	
+	public ResponseConsultarDatosAsociado consultarDatosAsociadoNew(String cedula) throws Exception {
+		ConsultaDatosAsociadoMD model = DatosAsociadoDAO.getInstance().consultarDatosAsociado(cedula);
+        ResponseConsultarDatosAsociado response = new ResponseConsultarDatosAsociado();
+        if(response != null){
+            response = new ResponseConsultarDatosAsociado(
+                model.getVa_anumnit(),
+                model.getVn_nombre(),
+                model.getVd_direcc() == null ? "" : model.getVd_direcc(),
+                model.getVt_celular() == null ? "" : model.getVt_celular(),
+                model.getVd_email() == null ? "" : model.getVd_email(),
+                model.getVn_barrio() == null ? "" : model.getVn_barrio(),
+                model.getVk_ciudad(),
+                model.getVn_ciudad() == null ? "" : model.getVn_ciudad().trim(),
+                model.getVk_depart(),
+                model.getVn_depart() == null ? "" : model.getVn_depart(),
+                model.getVk_pais(),
+                model.getVn_pais() == null ? "" : model.getVn_pais()
+            );
+        }
+		return response;
+	}
 
 }

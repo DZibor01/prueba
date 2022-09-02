@@ -6,6 +6,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.cm.solidappservice.helpers.scopeConstantes;
 import com.cm.solidappservice.manager.CodigoVerificacionManager;
 import com.cm.solidappservice.model.base.ResponseConstantes;
 import com.cm.solidappservice.model.base.BaseResponse;
@@ -32,8 +33,10 @@ public class CodigoVerificacion extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
     public BaseResponse<ResponseCodigo> enviarCodigoVerificacion(RequestEnviarCodigo request) {
         try {
-            ResponseValidacionParametros validacion = validateParameter(request);
+            ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_CODIGO_ENVIARCODIGO);
             if (!validacion.isValid()){
+            	validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
                 return new BaseResponse<ResponseCodigo>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),
@@ -64,8 +67,10 @@ public class CodigoVerificacion extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
     public BaseResponse<ResponseValidarCodigo> validarCodigoVerificacion(RequestValidarCodigo request) {
         try {
-            ResponseValidacionParametros validacion = validateParameter(request);
+            ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_CODIGO_VALIDARCODIGO);
             if (!validacion.isValid()){
+            	validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
                 return new BaseResponse<ResponseValidarCodigo>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),

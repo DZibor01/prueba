@@ -7,6 +7,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.cm.solidappservice.helpers.scopeConstantes;
 import com.cm.solidappservice.manager.DatosAsociadoManager;
 import com.cm.solidappservice.model.base.RequestAutenticacion;
 import com.cm.solidappservice.model.base.ResponseConstantes;
@@ -32,8 +33,10 @@ public class DatosAsociado extends BaseService{
 	@Produces(MediaType.APPLICATION_JSON)
     public BaseResponse<ResponseConsultarDatosAsociado> consultarDatosAsociado(RequestAutenticacion request) {
         try {
-            ResponseValidacionParametros validacion = validateParameter(request);
+            ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_DATOSASOCIADO_CONSULTARDATOS);
             if (!validacion.isValid()){
+            	validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
                 return new BaseResponse<ResponseConsultarDatosAsociado>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),
@@ -63,8 +66,10 @@ public class DatosAsociado extends BaseService{
 	@Produces(MediaType.APPLICATION_JSON)
     public BaseResponse<String> actualizarDatosAsociado(RequestActualizarDatos request) {
         try {
-            ResponseValidacionParametros validacion = validateParameter(request);
+            ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_DATOSASOCIADO_ACTUALIZARDATOS);
             if (!validacion.isValid()){
+            	validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
                 return new BaseResponse<String>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),
@@ -115,8 +120,10 @@ public class DatosAsociado extends BaseService{
 	@Produces(MediaType.APPLICATION_JSON)
     public BaseResponse<ResponseDatosBasicosAsociado> obtenerDatosBasicosAsociado(RequestAutenticacion request) {
         try {
-            ResponseValidacionParametros validacion = validateParameter(request);
+            ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_DATOSASOCIADO_CONSULTARDATOSBASICOS);
             if (!validacion.isValid()){
+            	validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
                 return new BaseResponse<ResponseDatosBasicosAsociado>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),

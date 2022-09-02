@@ -8,6 +8,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.cm.solidappservice.helpers.scopeConstantes;
 import com.cm.solidappservice.manager.MensajesInboxManager;
 import com.cm.solidappservice.model.base.RequestAutenticacion;
 import com.cm.solidappservice.model.base.ResponseConstantes;
@@ -33,8 +34,10 @@ public class MensajesInbox extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public BaseResponse<List<ResponseMensajesInbox>> obtenerMensajesInbox(RequestAutenticacion request) {
 		try {
-			ResponseValidacionParametros validacion = validateParameter(request);
+			ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_INBOX_OBTENERMENSAJES);
 			if (!validacion.isValid()) {
+				validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
 				return new BaseResponse<List<ResponseMensajesInbox>>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),
@@ -64,8 +67,10 @@ public class MensajesInbox extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public BaseResponse<String> enviarMensajeInbox(RequestEnvioMensajeInbox request) {
         try {
-            ResponseValidacionParametros validacion = validateParameter(request);
+            ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_INBOX_ENVIARMENSAJE);
             if (!validacion.isValid()){
+            	validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
                 return new BaseResponse<String>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),
@@ -95,8 +100,10 @@ public class MensajesInbox extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public BaseResponse<String> actualizarLecturaMensaje(RequestActualizarLectura request) {	
 		try {
-			ResponseValidacionParametros validacion = validateParameter(request);
+			ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_INBOX_ACTUALIZARMENSAJE);
 			if (!validacion.isValid()) {
+				validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
 				return new BaseResponse<String>(
 					validacion.getErrorParametros(),
 					validacion.getErrorParametros(),

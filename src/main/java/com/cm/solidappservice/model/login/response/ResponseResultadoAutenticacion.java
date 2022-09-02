@@ -1,6 +1,8 @@
 package com.cm.solidappservice.model.login.response;
 
-public class ResponseResultadoAutenticacion {
+import com.cm.solidappservice.model.base.BaseRequest;
+
+public class ResponseResultadoAutenticacion extends BaseRequest {
 	
 	private String token;
 	private String nombreAsociado;

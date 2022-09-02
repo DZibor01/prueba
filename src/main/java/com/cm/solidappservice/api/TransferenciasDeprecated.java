@@ -10,6 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.cm.solidappservice.helpers.scopeConstantes;
 import com.cm.solidappservice.manager.TransferenciasManager;
 import com.cm.solidappservice.model.base.RequestAutenticacion;
 import com.cm.solidappservice.model.base.ResponseConstantes;
@@ -41,8 +42,10 @@ public class TransferenciasDeprecated extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public BaseResponse<List<ResponseCuentaInscritaDeprecated>> getCuentasInscritas(RequestAutenticacion request) {
 		try {
-			ResponseValidacionParametros validacion = validateParameter(request);
+			ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_TRANSFERENCIAS_CUENTASINSCRITAS);
 			if (!validacion.isValid()) {
+				validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
 				return new BaseResponse<List<ResponseCuentaInscritaDeprecated>>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),
@@ -72,8 +75,10 @@ public class TransferenciasDeprecated extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public BaseResponse<List<ResponseCuentaDisponibleDeprecated>> getCuentasDisponibles(RequestCuentasDisponiblesDeprecated request) {
 		try {
-			ResponseValidacionParametros validacion = validateParameter(request);
+			ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_TRANSFERENCIAS_CUENTASDISPONIBLES);
 			if (!validacion.isValid()) {
+				validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
 				return new BaseResponse<List<ResponseCuentaDisponibleDeprecated>>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),
@@ -126,8 +131,10 @@ public class TransferenciasDeprecated extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public BaseResponse<String> solicitarInscribirCuenta(RequestSolicitudInscripcionCuenta request) {
 		try {
-			ResponseValidacionParametros validacion = validateParameter(request);
+			ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_TRANSFERENCIAS_SOLICITARINSCRIBIRCUENTA);
 			if (!validacion.isValid()) {
+				validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
 				return new BaseResponse<String>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),
@@ -160,8 +167,10 @@ public class TransferenciasDeprecated extends BaseService {
 		String idLog = String.valueOf(timestamp.getTime());
 		try {
 			crearLogApi(idLog, request.getCedula(), "/transferencias/realizarTransferencia", "Transferencias", "POST", request);
-			ResponseValidacionParametros validacion = validateParameter(request);
+			ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_TRANSFERENCIA_REALIZARTRANSFERENCIA);
 			if (!validacion.isValid()) {
+				validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
 				actualizarLogApi(idLog, "", "ERROR", validacion.getErrorToken() + validacion.getErrorParametros());
 				return new BaseResponse<String>(
                     validacion.getErrorParametros(),
@@ -194,8 +203,10 @@ public class TransferenciasDeprecated extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public BaseResponse<List<ResponseTransferenciasIncompletasDeprecated>> consultarTransferencia(RequestAutenticacion request) {		
 		try {
-			ResponseValidacionParametros validacion = validateParameter(request);
+			ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_TRANSFERENCIA_CONSULTARTRANSFERENCIAS);
 			if (!validacion.isValid()) {
+				validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
 				return new BaseResponse<List<ResponseTransferenciasIncompletasDeprecated>>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),
@@ -226,8 +237,10 @@ public class TransferenciasDeprecated extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public BaseResponse<String> eliminarCuenta(RequestEliminacionCuenta request) {
 		try {
-			ResponseValidacionParametros validacion = validateParameter(request);
+			ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_TRANSFERENCIA_ELIMINARCUENTA);
 			if (!validacion.isValid()) {
+				validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
 				return new BaseResponse<String>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),

@@ -1,5 +1,6 @@
 package com.cm.solidappservice.api;
 
+import com.cm.solidappservice.helpers.scopeConstantes;
 import com.cm.solidappservice.manager.TyCManager;
 import com.cm.solidappservice.model.base.RequestAutenticacion;
 import com.cm.solidappservice.model.base.ResponseConstantes;
@@ -34,8 +35,10 @@ public class TyCDeprecated extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
     public BaseResponse<String> insertarTerminosAceptados(RequestTyCDeprecated request) {
         try {
-            ResponseValidacionParametros validacion = validateParameter(request);
+            ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_TERMINOSYCONDICIONES_INSERTARTERMINOSACEPTADOS);
             if (!validacion.isValid()){
+            	validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
                 return new BaseResponse<String>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),
@@ -65,8 +68,10 @@ public class TyCDeprecated extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
     public BaseResponse<List<ResponseTyCAceptadosDeprecated>> obtenerTerminosAceptados(RequestAutenticacion request) {
         try {
-            ResponseValidacionParametros validacion = validateParameter(request);
+            ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_TERMINOSYCONDICIONES_OBTENERTERMINOSACEPTADOS);
             if (!validacion.isValid()){
+            	validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
                 return new BaseResponse<List<ResponseTyCAceptadosDeprecated>>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),

@@ -1,5 +1,6 @@
 package com.cm.solidappservice.api;
 
+import com.cm.solidappservice.helpers.scopeConstantes;
 import com.cm.solidappservice.manager.TyCManager;
 import com.cm.solidappservice.model.base.ResponseConstantes;
 import com.cm.solidappservice.model.base.BaseResponse;
@@ -32,8 +33,10 @@ public class TyC extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
     public BaseResponse<String> insertarTerminosAceptados(RequestTyC request) {
         try {
-            ResponseValidacionParametros validacion = validateParameter(request);
+            ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_TYC_REGISTRARTERMINOSACEPTADOS);
             if (!validacion.isValid()){
+            	validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
                 return new BaseResponse<String>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),

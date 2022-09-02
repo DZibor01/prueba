@@ -15,6 +15,7 @@ import com.cm.solidappservice.model.base.BaseResponse;
 import com.cm.solidappservice.model.base.ResponseValidacionParametros;
 import com.cm.solidappservice.model.obligaciones.request.*;
 import com.cm.solidappservice.model.obligaciones.response.*;
+import com.cm.solidappservice.helpers.scopeConstantes;
 import com.cm.solidappservice.manager.ObligacionesManager;
 import com.cm.solidappservice.utils.Utilities;
 
@@ -37,8 +38,10 @@ public class Obligaciones extends BaseService {
 		String idLog = String.valueOf(timestamp.getTime());
 		try {
 			crearLogApi(idLog, request.getCedula(), "/abonos/pagarObligacion", "PagoObligacion", "POST", request);
-			ResponseValidacionParametros validacion = validateParameter(request);
+			ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_OBLIGACIONES_REALIZARPAGO);
 			if (!validacion.isValid()) {
+				validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
 				actualizarLogApi(idLog, "", "ERROR", validacion.getErrorToken() + validacion.getErrorParametros());
 				return new BaseResponse<String>(
                     validacion.getErrorParametros(),
@@ -74,8 +77,10 @@ public class Obligaciones extends BaseService {
 		String idLog = String.valueOf(timestamp.getTime());
 		try {
 			crearLogApi(idLog, request.getCedula(), "/abonos/consultarPagosIncompletos", "PagoObligacion", "POST", request);
-			ResponseValidacionParametros validacion = validateParameter(request);
+			ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_OBLIGACIONES_CONSULTARPAGOSINCOMPLETOS);
 			if (!validacion.isValid()) {
+				validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
 				actualizarLogApi(idLog, "", "ERROR", validacion.getErrorToken() + validacion.getErrorParametros());
 				return new BaseResponse<List<ResponsePagosObligaciones>>(
                     validacion.getErrorParametros(),

@@ -9,6 +9,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.cm.solidappservice.helpers.scopeConstantes;
 import com.cm.solidappservice.manager.TarjetaPresenteManager;
 import com.cm.solidappservice.model.base.RequestAutenticacion;
 import com.cm.solidappservice.model.base.ResponseConstantes;
@@ -37,8 +38,10 @@ public class TarjetaPresente extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public BaseResponse<List<ResponseTarjeta>> getTarjetas(RequestAutenticacion request) {
 		try {
-			ResponseValidacionParametros validacion = validateParameter(request);
+			ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_TARJETAPRESENTE_OBTENERTARJETAS);
 			if (!validacion.isValid()) {
+				validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
 				return new BaseResponse<List<ResponseTarjeta>>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),
@@ -68,8 +71,10 @@ public class TarjetaPresente extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public BaseResponse<String> updateTarjeta(RequestActualizarEstadoTarjeta request) {
 		try {
-			ResponseValidacionParametros validacion = validateParameter(request);
+			ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_TARJETAPRESENTE_CAMBIARESTADO);
 			if (!validacion.isValid()) {
+				validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
 				return new BaseResponse<String>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),
@@ -99,8 +104,10 @@ public class TarjetaPresente extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public BaseResponse<String[]> getMotivosBloqueo(RequestAutenticacion request) {
 		try {
-			ResponseValidacionParametros validacion = validateParameter(request);
+			ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_TARJETAPRESENTE_MOTIVOSBLOQUEO);
 			if (!validacion.isValid()) {
+				validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
 				return new BaseResponse<String[]>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),
@@ -151,8 +158,10 @@ public class TarjetaPresente extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
     public BaseResponse<String> registrarReposicionTarjeta(RequestReposicionTarjeta request) {
 		try {
-            ResponseValidacionParametros validacion = validateParameter(request);
+            ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_TARJETAPRESENTE_REPOSICIONTARJETA);
             if (!validacion.isValid()){
+            	validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
                 return new BaseResponse<String>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),
@@ -182,8 +191,10 @@ public class TarjetaPresente extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public BaseResponse<ResponseDatosAsociadoTarjeta> getDatosAsosiadoTarjeta(RequestAutenticacion request) {
 		try {
-			ResponseValidacionParametros validacion = validateParameter(request);
+			ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_TARJETAPRESENTE_DATOSASOSIADO);
 			if (!validacion.isValid()){
+				validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
 				return new BaseResponse<ResponseDatosAsociadoTarjeta>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),

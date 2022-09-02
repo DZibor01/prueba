@@ -9,6 +9,7 @@ import javax.ws.rs.core.MediaType;
 import java.sql.Timestamp;
 
 import com.cm.solidappservice.security.Encripcion;
+import com.cm.solidappservice.helpers.scopeConstantes;
 import com.cm.solidappservice.manager.DatosAsociadoManager;
 import com.cm.solidappservice.manager.LoginManager;
 import com.cm.solidappservice.manager.PortalUnicoManager;
@@ -33,8 +34,146 @@ public class Login extends BaseService {
         utilities = new Utilities();
         utilities.getResponseMessages();
     }
+    
+    // EN DESUSO PROXIMAMENTE
+    @POST
+    @Path("/olvidoClave")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public BaseResponse<String> recuperarClave(RequestLogin request) {
+		try {
+			if (Utilities.IsNullOrEmpty(request.getCedula())) {
+				return new BaseResponse<String>(
+					ResponseConstantes.ERROR_VACIO, "Debe especificar la cédula.", ResponseConstantes.CADENA_VACIA);
+			}
+			request.setCedula(Encripcion.getInstance().desencriptar(request.getCedula()));
+			this.cedula = request.getCedula();
+			LoginManager.getInstance().recordarClave(request);
+			return new BaseResponse<String>(
+                    ResponseConstantes.ERROR_VACIO,
+                    ResponseConstantes.ERROR_VACIO,
+                    ResponseConstantes.ERROR_VACIO,
+                    Utilities.CORREO_CLAVE_ENVIADO);
+		} catch (CustomException cEx){
+			logError("login/olvidoClave", cEx.getMessage());
+			return new BaseResponse<String>(
+                    cEx.getMessage(), 
+                    Utilities.CORREO_INVALIDO,
+                    ResponseConstantes.ERROR_VACIO,
+                    null);
+		}
+		catch (Exception e) {
+			logError("login/olvidoClave", e.getMessage());
+			return new BaseResponse<String>(
+					e.getMessage(), 
+                    Utilities.CORREO_INVALIDO,
+                    ResponseConstantes.ERROR_VACIO,
+                    null);
+		}
+	}
 
-	@POST
+    @POST
+    @Path("/consultarDatosAsociado")
+    @Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+    public BaseResponse<ResponseDatosBasicosAsociadoDeprecated> consultarDatosAsociadoDeprecated(RequestAutenticacion request) {
+        try {
+            ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_LOGIN_CONSULTARDATOSASOCIADO);
+            if (!validacion.isValid()){
+            	validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
+                return new BaseResponse<ResponseDatosBasicosAsociadoDeprecated>(
+                    validacion.getErrorParametros(),
+                    validacion.getErrorParametros(),
+                    validacion.getErrorToken(), 
+                    null); 
+            } else {
+                ResponseDatosBasicosAsociadoDeprecated response = DatosAsociadoManager.getInstance()
+                    .obtenerDatosBasicosAsociadoDeprecated(request);
+                return new BaseResponse<ResponseDatosBasicosAsociadoDeprecated>(
+                    ResponseConstantes.ERROR_VACIO,
+                    ResponseConstantes.ERROR_VACIO,
+                    ResponseConstantes.ERROR_VACIO,
+                    response);
+            }
+        } catch (Exception e) {
+            logError("login/consultarDatosAsociado", e.getMessage());
+            return new BaseResponse<ResponseDatosBasicosAsociadoDeprecated>(
+                e.getMessage(), 
+                Utilities.ERROR_SERVICIO,
+                ResponseConstantes.ERROR_VACIO,
+                null);
+        } 
+	}
+    
+
+    @POST
+    @Path("/registrarPortalUnico")
+    @Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+    public BaseResponse<String> registrarPortalUnicoDeprecated(RequestRegistroIngresoDeprecated request) {
+        try {
+        	ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_LOGIN_REGISTRARPORTALUNICO);
+            if (!validacion.isValid()){
+            	validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
+                return new BaseResponse<String>(
+                    validacion.getErrorParametros(),
+                    validacion.getErrorParametros(),
+                    validacion.getErrorToken(), 
+                    null); 
+            } else {
+                String response = PortalUnicoManager.getInstance().registrarIngresoPortalUnicoDeprecated(request);
+                return new BaseResponse<String>(
+                    ResponseConstantes.ERROR_VACIO,
+                    ResponseConstantes.ERROR_VACIO,
+                    ResponseConstantes.ERROR_VACIO,
+                    response);
+            }
+        } catch (Exception e) {
+            logError("login/consultarDatosAsociado", e.getMessage());
+            return new BaseResponse<String>(
+                e.getMessage(), 
+                Utilities.ERROR_SERVICIO,
+                ResponseConstantes.ERROR_VACIO,
+                null);
+        }
+    }
+
+    ///////////////// METODOS PARA WSO2 ////////////////////////////
+    
+    @POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+    public BaseResponse<ResponseResultadoAutenticacion> autenticarSession(RequestAutenticacion requestBasic) {
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		String idLog = String.valueOf(timestamp.getTime());
+		try {
+			crearLogApi(idLog, requestBasic.getToken(), "/login/", "autenticarSession", "POST", "");
+			ResponseValidacionParametros validacion = validateParameterNew(requestBasic, scopeConstantes.SCOPE_LOGIN);
+			if(!validacion.isValid()) {
+				validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
+				actualizarLogApi(idLog, "ERROR", validacion.getErrorToken(), validacion.getErrorParametros());
+				return new BaseResponse<ResponseResultadoAutenticacion>(validacion.getErrorParametros(),
+						validacion.getErrorParametros(), validacion.getErrorToken(), null);
+			}else {
+				ResponseResultadoAutenticacion response = LoginManager.getInstance().autenticarUsuarioNew(
+						validacion.getCedula(), requestBasic.getToken());
+				actualizarLogApi(idLog, response, ResponseConstantes.RESULTADO_EXITOSO, "");
+				return new BaseResponse<ResponseResultadoAutenticacion>(ResponseConstantes.ERROR_VACIO,
+						ResponseConstantes.ERROR_VACIO, ResponseConstantes.ERROR_VACIO, response);
+			}	
+		} catch (Exception e) {
+			logError("login", e.getMessage());
+			actualizarLogApi(idLog, "", "ERROR", e.getMessage() + " " + e.getCause());
+			return new BaseResponse<ResponseResultadoAutenticacion>(e.getMessage(), Utilities.ERROR_SERVICIO,
+					ResponseConstantes.ERROR_VACIO, null);
+		}
+
+	}
+
+	/*@POST
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
     public BaseResponse<ResponseResultadoAutenticacion> autenticarUsuario(RequestLogin request) {
@@ -97,9 +236,9 @@ public class Login extends BaseService {
                     ResponseConstantes.ERROR_VACIO,
                     null);
 		}
-	}
+	}*/
 
-	@POST
+	/*@POST
     @Path("/validarTokenSession")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -148,105 +287,6 @@ public class Login extends BaseService {
                     ResponseConstantes.ERROR_VACIO,
                     null);
         } 
-    }
-
-    @POST
-    @Path("/olvidoClave")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public BaseResponse<String> recuperarClave(RequestLogin request) {
-		try {
-			if (Utilities.IsNullOrEmpty(request.getCedula())) {
-				return new BaseResponse<String>(
-					ResponseConstantes.ERROR_VACIO, "Debe especificar la cédula.", ResponseConstantes.CADENA_VACIA);
-			}
-			request.setCedula(Encripcion.getInstance().desencriptar(request.getCedula()));
-			this.cedula = request.getCedula();
-			LoginManager.getInstance().recordarClave(request);
-			return new BaseResponse<String>(
-                    ResponseConstantes.ERROR_VACIO,
-                    ResponseConstantes.ERROR_VACIO,
-                    ResponseConstantes.ERROR_VACIO,
-                    Utilities.CORREO_CLAVE_ENVIADO);
-		} catch (CustomException cEx){
-			logError("login/olvidoClave", cEx.getMessage());
-			return new BaseResponse<String>(
-                    cEx.getMessage(), 
-                    Utilities.CORREO_INVALIDO,
-                    ResponseConstantes.ERROR_VACIO,
-                    null);
-		}
-		catch (Exception e) {
-			logError("login/olvidoClave", e.getMessage());
-			return new BaseResponse<String>(
-					e.getMessage(), 
-                    Utilities.CORREO_INVALIDO,
-                    ResponseConstantes.ERROR_VACIO,
-                    null);
-		}
-	}
-
-    @POST
-    @Path("/consultarDatosAsociado")
-    @Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-    public BaseResponse<ResponseDatosBasicosAsociadoDeprecated> consultarDatosAsociadoDeprecated(RequestAutenticacion request) {
-        try {
-            ResponseValidacionParametros validacion = validateParameter(request);
-            if (!validacion.isValid()){
-                return new BaseResponse<ResponseDatosBasicosAsociadoDeprecated>(
-                    validacion.getErrorParametros(),
-                    validacion.getErrorParametros(),
-                    validacion.getErrorToken(), 
-                    null); 
-            } else {
-                ResponseDatosBasicosAsociadoDeprecated response = DatosAsociadoManager.getInstance()
-                    .obtenerDatosBasicosAsociadoDeprecated(request);
-                return new BaseResponse<ResponseDatosBasicosAsociadoDeprecated>(
-                    ResponseConstantes.ERROR_VACIO,
-                    ResponseConstantes.ERROR_VACIO,
-                    ResponseConstantes.ERROR_VACIO,
-                    response);
-            }
-        } catch (Exception e) {
-            logError("login/consultarDatosAsociado", e.getMessage());
-            return new BaseResponse<ResponseDatosBasicosAsociadoDeprecated>(
-                e.getMessage(), 
-                Utilities.ERROR_SERVICIO,
-                ResponseConstantes.ERROR_VACIO,
-                null);
-        } 
-	}
-
-    @POST
-    @Path("/registrarPortalUnico")
-    @Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-    public BaseResponse<String> registrarPortalUnicoDeprecated(RequestRegistroIngresoDeprecated request) {
-        try {
-            ResponseValidacionParametros validacion = validateParameter(request);
-            if (!validacion.isValid()){
-                return new BaseResponse<String>(
-                    validacion.getErrorParametros(),
-                    validacion.getErrorParametros(),
-                    validacion.getErrorToken(), 
-                    null); 
-            } else {
-                String response = PortalUnicoManager.getInstance().registrarIngresoPortalUnicoDeprecated(request);
-                return new BaseResponse<String>(
-                    ResponseConstantes.ERROR_VACIO,
-                    ResponseConstantes.ERROR_VACIO,
-                    ResponseConstantes.ERROR_VACIO,
-                    response);
-            }
-        } catch (Exception e) {
-            logError("login/consultarDatosAsociado", e.getMessage());
-            return new BaseResponse<String>(
-                e.getMessage(), 
-                Utilities.ERROR_SERVICIO,
-                ResponseConstantes.ERROR_VACIO,
-                null);
-        }
-    }
+    }*/
     
 }

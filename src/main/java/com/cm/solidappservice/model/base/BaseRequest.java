@@ -1,6 +1,9 @@
 package com.cm.solidappservice.model.base;
 
-public class BaseRequest {
+import com.cm.solidappservice.model.login.request.RequestBasicSession;
+import com.cm.solidappservice.utils.Utilities;
+
+public class BaseRequest extends RequestBasicSession{
 	
 	private String cedula;
 		
@@ -17,5 +20,9 @@ public class BaseRequest {
 	
 	public void setCedula(String cedula) {
 		this.cedula = cedula;
+	}
+	
+	public boolean isValidId() {
+		return Utilities.IsNullOrEmpty(this.cedula) == true ? false : true;
 	}
 }

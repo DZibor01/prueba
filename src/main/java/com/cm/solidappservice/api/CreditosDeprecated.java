@@ -1,5 +1,6 @@
 package com.cm.solidappservice.api;
 
+import com.cm.solidappservice.helpers.scopeConstantes;
 import com.cm.solidappservice.manager.CreditosManager;
 import com.cm.solidappservice.model.base.RequestAutenticacion;
 import com.cm.solidappservice.model.base.ResponseConstantes;
@@ -34,8 +35,10 @@ public class CreditosDeprecated extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public BaseResponse<List<ResponseLineasCreditoDeprecated>> obtenerLineasCredito(RequestAutenticacion request) {
 		try {
-			ResponseValidacionParametros validacion = validateParameter(request);
+			ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_CREDITOS_OBTENERLINEASCREDITO);
 			if (!validacion.isValid()){
+				validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
 				return new BaseResponse<List<ResponseLineasCreditoDeprecated>>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),
@@ -65,8 +68,10 @@ public class CreditosDeprecated extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public BaseResponse<ResponseDatosAsociadoDeprecated> obtenerDatosAsosiado(RequestAutenticacion request) {
 		try {
-			ResponseValidacionParametros validacion = validateParameter(request);
+			ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_CREDITOS_OBTENERDATOSASOSIADO);
 			if (!validacion.isValid()){
+				validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
 				return new BaseResponse<ResponseDatosAsociadoDeprecated>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),
@@ -96,8 +101,10 @@ public class CreditosDeprecated extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public BaseResponse<ResponseRadicadoDeprecated> radicarCredito(RequestRadicarCreditoDeprecated request) {
 		try {
-			ResponseValidacionParametros validacion = validateParameter(request);
+			ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_CREDITOS_RADICARCREDITO);
 			if (!validacion.isValid()){
+				validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
 				return new BaseResponse<ResponseRadicadoDeprecated>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),
@@ -127,8 +134,10 @@ public class CreditosDeprecated extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public BaseResponse<String> infoCredito(RequestInformacionCreditoDeprecated request) {
 		try {
-			ResponseValidacionParametros validacion = validateParameter(request);
+			ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_CREDITOS_INFOCREDITO);
 			if (!validacion.isValid()){
+				validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
 				return new BaseResponse<String>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),
@@ -159,8 +168,10 @@ public class CreditosDeprecated extends BaseService {
 	public BaseResponse<String> guardarReferencias(List<RequestReferenciaCreditoDeprecated> listRequest) {
 		try {
 			RequestReferenciaCreditoDeprecated request = listRequest.get(0);
-			ResponseValidacionParametros validacion = validateParameter(request);
+			ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_CREDITOS_GUARDARREFERENCIAS);
 			if (!validacion.isValid()) {
+				validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
 				return new BaseResponse<String>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),
@@ -172,7 +183,7 @@ public class CreditosDeprecated extends BaseService {
 				for (int f = 0; f < listRequest.size(); f++) {
 					RequestReferenciaCreditoDeprecated p = listRequest.get(f);
 					if (f > 0)
-						validateParameter(p);
+						validateParameterNew(p, scopeConstantes.SCOPE_CREDITOS_GUARDARREFERENCIAS);
 					response = CreditosManager.getInstance().guardarReferenciasDeprecated(p);
 				}
 				return new BaseResponse<String>(
@@ -198,8 +209,10 @@ public class CreditosDeprecated extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public BaseResponse<ResponseGestorAsociadoDeprecated> obtenerGestorAsosiado(RequestAutenticacion request) {
 		try {
-			ResponseValidacionParametros validacion = validateParameter(request);
+			ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_CREDITOS_OBTENERGESTORASOSIADO);
 			if (!validacion.isValid()){
+				validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
 				return new BaseResponse<ResponseGestorAsociadoDeprecated>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),
@@ -229,8 +242,10 @@ public class CreditosDeprecated extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public BaseResponse<List<ResponseUbicacionesDeprecated>> obtenerUbicaciones(RequestAutenticacion request) {
 		try {
-			ResponseValidacionParametros validacion = validateParameter(request);
+			ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_CREDITOS_OBTENERCIUDADESDEPARTAMENTOS);
 			if (!validacion.isValid()){
+				validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
 				return new BaseResponse<List<ResponseUbicacionesDeprecated>>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),
@@ -281,8 +296,10 @@ public class CreditosDeprecated extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public BaseResponse<List<ResponseCreditosRadicadosDeprecated>> obtenerCreditosRadicados(RequestAutenticacion request) {
 		try {
-			ResponseValidacionParametros validacion = validateParameter(request);
+			ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_CREDITOS_OBTENERCREDITOSRADICADOS);
 			if (!validacion.isValid()){
+				validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
 				return new BaseResponse<List<ResponseCreditosRadicadosDeprecated>>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),
@@ -312,8 +329,10 @@ public class CreditosDeprecated extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public BaseResponse<List<ResponseParentescos>> obtenerParentescos(RequestAutenticacion request) {
 		try {
-			ResponseValidacionParametros validacion = validateParameter(request);
+			ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_CREDITOS_OBTENERPARENTESCOS);
 			if (!validacion.isValid()){
+				validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
 				return new BaseResponse<List<ResponseParentescos>>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),

@@ -1,5 +1,6 @@
 package com.cm.solidappservice.api;
 
+import com.cm.solidappservice.helpers.scopeConstantes;
 import com.cm.solidappservice.manager.AdelantoNominaManager;
 import com.cm.solidappservice.model.adelantonomina.request.*;
 import com.cm.solidappservice.model.adelantonomina.response.*;
@@ -36,8 +37,10 @@ public class AdelantoNominaDeprecated extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
     public BaseResponse<ResponseValidarRequisitosDeprecated> validarRequisitos(RequestAutenticacion request) {
         try {
-            ResponseValidacionParametros validacion = validateParameter(request);
+            ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_ADELANTODENOMINA_VALIDARREQUISITOS);
             if (!validacion.isValid()){
+            	validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
                 return new BaseResponse<ResponseValidarRequisitosDeprecated>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),
@@ -74,8 +77,10 @@ public class AdelantoNominaDeprecated extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
     public BaseResponse<List<ResponseMotivosNoCumple>> obtenerNoCumple(RequestMotivosNoCumple request) {
         try {
-            ResponseValidacionParametros validacion = validateParameter(request);
+            ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_ADELANTODENOMINA_OBTENERNOCUMPLE);
             if (!validacion.isValid()){
+            	validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
                 return new BaseResponse<List<ResponseMotivosNoCumple>>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),
@@ -133,8 +138,10 @@ public class AdelantoNominaDeprecated extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
     public BaseResponse<ResponseTopesDeprecated> obtenerTopes(RequestAutenticacion request) {
         try {
-            ResponseValidacionParametros validacion = validateParameter(request);
+            ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_ADELANTODENOMINA_OBTENERTOPES);
             if (!validacion.isValid()){
+            	validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
                 return new BaseResponse<ResponseTopesDeprecated>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),
@@ -171,8 +178,10 @@ public class AdelantoNominaDeprecated extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
     public BaseResponse<ResponseSolicitarAdelantoDeprecated> solicitarAdelantoNomina(RequestSolicitarAdelantoDeprecated request) {
         try {
-            ResponseValidacionParametros validacion = validateParameter(request);
+            ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_ADELANTODENOMINA_ADELANTAR);
             if (!validacion.isValid()){
+            	validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
                 return new BaseResponse<ResponseSolicitarAdelantoDeprecated>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),
@@ -209,8 +218,10 @@ public class AdelantoNominaDeprecated extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
     public BaseResponse<ResponseProcesarSolicitudAdelantoDeprecated> procesarAdelantoNomina(RequestProcesarSolicitudAdelantoDeprecated request) {
         try {
-            ResponseValidacionParametros validacion = validateParameter(request);
+            ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_ADELANTODENOMINA_ADELANTARCONSULTA);
             if (!validacion.isValid()){
+            	validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
                 return new BaseResponse<ResponseProcesarSolicitudAdelantoDeprecated>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),
@@ -250,8 +261,10 @@ public class AdelantoNominaDeprecated extends BaseService {
 		String idLog = String.valueOf(timestamp.getTime());
         try {
             crearLogApi(idLog, request.getCedula(), "/AdelantoDeNomina/insertarAdelanto", "AdelantoDeNomina", "POST", request);
-            ResponseValidacionParametros validacion = validateParameter(request);
+            ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_ADELANTODENOMINA_INSERTARADELANTO);
             if (!validacion.isValid()){
+            	validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
                 actualizarLogApi(idLog, "", "ERROR", validacion.getErrorToken() + validacion.getErrorParametros());
                 return new BaseResponse<String>(
                     validacion.getErrorParametros(),
@@ -291,8 +304,10 @@ public class AdelantoNominaDeprecated extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
     public BaseResponse<String> actualizarAdelantoNomina(RequestActualizarAdelantoNomina request) {
         try {
-            ResponseValidacionParametros validacion = validateParameter(request);
+            ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_ADELANTODENOMINA_ACTUALIZARADELANTO);
             if (!validacion.isValid()){
+            	validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
                 return new BaseResponse<String>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),
@@ -329,8 +344,10 @@ public class AdelantoNominaDeprecated extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
     public BaseResponse<List<ResponseMovimientosAdelantoDeprecated>> obtenerMovimientosAdelantoNomina(RequestAutenticacion request) {
         try {
-            ResponseValidacionParametros validacion = validateParameter(request);
+            ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_ADELANTODENOMINA_OBTENERMOVIMIENTOS);
             if (!validacion.isValid()){
+            	validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
                 return new BaseResponse<List<ResponseMovimientosAdelantoDeprecated>>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),
@@ -388,8 +405,10 @@ public class AdelantoNominaDeprecated extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
     public BaseResponse<String> registrarLogsAdelantoNomina(RequestRegistroLogsDeprecated request) {
         try {
-            ResponseValidacionParametros validacion = validateParameter(request);
+            ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_ADELANTODENOMINA_REGISTROADELANTONOMINA);
             if (!validacion.isValid()){
+            	validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
                 return new BaseResponse<String>(
                     validacion.getErrorParametros(),
                     validacion.getErrorParametros(),

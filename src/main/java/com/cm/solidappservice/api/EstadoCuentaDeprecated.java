@@ -16,6 +16,7 @@ import com.cm.solidappservice.model.base.BaseResponse;
 import com.cm.solidappservice.model.base.ResponseValidacionParametros;
 import com.cm.solidappservice.model.estadocuenta.request.*;
 import com.cm.solidappservice.model.estadocuenta.response.*;
+import com.cm.solidappservice.helpers.scopeConstantes;
 import com.cm.solidappservice.manager.EstadoCuentaManager;
 import com.cm.solidappservice.utils.Utilities;
 
@@ -38,8 +39,10 @@ public class EstadoCuentaDeprecated extends BaseService {
 		String idLog = String.valueOf(timestamp.getTime());
 		try {
 			crearLogApi(idLog, request.getCedula(), "/estadoCuenta/consultarCuentas", "EstadoCuenta", "POST", request);
-        	ResponseValidacionParametros validacion = validateParameter(request);
+        	ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_ESTADOCUENTA_CONSULTARCUENTAS);
         	if (!validacion.isValid()) {
+        		validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
 				actualizarLogApi(idLog, "", "ERROR", validacion.getErrorToken() + validacion.getErrorParametros());
 				return new BaseResponse<List<ResponseConsultarCuentasDeprecated>>(
                     validacion.getErrorParametros(),
@@ -75,8 +78,10 @@ public class EstadoCuentaDeprecated extends BaseService {
 		String idLog = String.valueOf(timestamp.getTime());
         try {
 			crearLogApi(idLog, request.getCedula(), "/estadoCuenta/consultarMovimientosCuenta", "EstadoCuenta", "POST", request);
-        	ResponseValidacionParametros validacion = validateParameter(request);
+        	ResponseValidacionParametros validacion = validateParameterNew(request, scopeConstantes.SCOPE_ESTADOCUENTA_CONSULTARMOVIMIENTOSCUENTA);
         	if (!validacion.isValid()) {
+        		validacion.setErrorToken(Utilities.IsNullOrEmpty(validacion.getErrorToken()) == true ? "" : validacion.getErrorToken());
+				validacion.setErrorParametros(Utilities.IsNullOrEmpty(validacion.getErrorParametros()) == true ? "Error obteniendo cedula" : validacion.getErrorToken());
 				actualizarLogApi(idLog, "", "ERROR", validacion.getErrorToken() + validacion.getErrorParametros());
 				return new BaseResponse<List<ResponseMovimientoCuentaDeprecated>>(
                     validacion.getErrorParametros(),
